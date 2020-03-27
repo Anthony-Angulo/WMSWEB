@@ -1,0 +1,106 @@
+<div class="header">
+  <button (click)="backClicked()" class="btn btn-primary btn-right">Back</button>
+  <h2>Orden de Compra - Detalle</h2>
+</div>
+
+
+<div class="body">
+  <div class="row" *ngIf="purchaseOrder">
+
+    <div class="col-12 subtitle">
+      <h2>Información Basica</h2>
+    </div>
+
+    <div class="col-6">
+      <label>Numero de Documento</label>
+      {{purchaseOrder.DocNum}}
+    </div>
+
+    <div class="col-6">
+      <label>Contacto</label>
+      {{purchaseOrder.CardName}}
+    </div>
+
+    <div class="col-6">
+      <label>Codigo de Proveedor</label>
+      {{purchaseOrder.CardCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha del Documento</label>
+      {{purchaseOrder.DocDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de Entrega</label>
+      {{purchaseOrder.DocDueDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de vencimiento</label>
+      {{purchaseOrder.CancelDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Estatus del Documento</label>
+      {{purchaseOrder.DocStatus}}
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal</label>
+      {{purchaseOrder.WhsName}}
+    </div>
+
+    <div class="col-6">
+      <label>Moneda</label>
+      {{purchaseOrder.DocCur}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Notas</h2>
+    </div>
+
+    <div class="col-12">
+      <label>Comentarios</label>
+      {{purchaseOrder.Comments}}
+    </div>
+
+
+    <div class="col-12 subtitle">
+      <h2>Productos y Servicios</h2>
+    </div>
+
+    <div class="table-responsive col-12">
+      <table class="table">
+        <thead>
+          <th>Codigo</th>
+          <th>Productos </th>
+          <th>Costo Unit </th>
+          <th>Cantidad PU</th>
+          <th>Cantidad SU </th>
+          <th>Total linea</th>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let product of purchaseOrder.PurchaseOrderRows">
+            <td>{{ product.ItemCode }}</td>
+            <td>{{ product.Dscription }}</td>
+            <td>{{ product.Price }} {{ product.Currency }}</td>
+            <td>{{ product.Quantity }} {{ product.UomCode }}</td>
+            <td>{{ product.InvQty}} {{ product.UomCode2 }}</td>
+            <td><strong>{{ product.Total }} {{ purchaseOrder.DocCur }}</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" rowspan="3"></td>
+          </tr>
+
+          <tr>
+            <td><label>Valor Bruto</label></td>
+            <td><strong>{{purchaseOrder.Total }} {{purchaseOrder.DocCur}}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

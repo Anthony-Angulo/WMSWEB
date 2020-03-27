@@ -1,0 +1,25 @@
+<div class="header">
+  <!-- <button class="btn btn-primary btn-right" routerLink="/orders/create">Crear Pedido</button> -->
+  <h2>Lista de Pedidos</h2>
+</div>
+
+<div class="body">
+  <div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <tfoot>
+        <tr>
+          <th><input type="text" class="form-control" placeholder="Buscar Numero de Orden" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Creador Por" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Contacto" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Contacto" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Sucursal" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Total" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Moneda" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Pago" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Status" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Fecha" /></th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="header">
+  <button (click)="backClicked()" class="btn btn-primary btn-right">Back</button>
+  <h2>Entrega - Detalle</h2>
+</div>
+
+<div class="body">
+  <div class="row" *ngIf="delivery">
+
+    <div class="col-12 subtitle">
+      <h2>Información Basica</h2>
+    </div>
+
+    <div class="col-sm-6">
+      <label>Numero de Documento</label>
+      {{delivery.DocNum}}
+    </div>
+
+    <div class="col-sm-6">
+      <label>Contacto</label>
+      {{delivery.CardName}}
+    </div>
+
+    <div class="col-6">
+      <label>Codigo de Cliente</label>
+      {{delivery.CardCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor</label>
+      {{delivery.SlpName}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor id</label>
+      {{delivery.SlpCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha del Documento</label>
+      {{delivery.DocDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de vencimiento</label>
+      {{delivery.CancelDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de Entrega</label>
+      {{delivery.DocDueDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Estatus del Documento</label>
+      {{delivery.DocStatus}}
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal que Surte</label>
+      {{delivery.WhsName}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Facturación</label>
+      {{delivery.Address}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Envio</label>
+      {{delivery.Address2}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Forma de Pago</h2>
+    </div>
+
+    <div class="col-4">
+      <label>Moneda</label>
+      {{delivery.DocCur}}
+    </div>
+
+    <div class="col-4">
+      <label>Pago</label>
+      {{delivery.PymntGroup}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Notas</h2>
+    </div>
+
+    <div class="col-12">
+      <label>Comentarios</label>
+      {{delivery.Comments}}
+    </div>
+
+
+    <div class="col-12 subtitle">
+      <h2>Productos y Servicios</h2>
+    </div>
+
+    <div class="table-responsive col-12">
+      <table class="table">
+        <thead>
+          <th>Codigo</th>
+          <th>Productos </th>
+          <th>Costo Unit </th>
+          <th>Cantidad PU</th>
+          <th>Cantidad SU </th>
+          <th>Total linea</th>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let product of delivery.DLN1">
+            <td>{{ product.ItemCode }}</td>
+            <td>{{ product.Dscription }}</td>
+            <td>{{ product.Price | number : '1.2' }} {{ product.Currency }}</td>
+
+            <td *ngIf="product.U_CjsPsVr==0">{{ product.Quantity | number : '1.2' }} {{ product.UomCode }}</td>
+            <td *ngIf="product.U_CjsPsVr!=0" >{{ product.U_CjsPsVr | number : '1.2' }} CAJA</td>
+
+            <td>{{ product.InvQty | number : '1.2'}} {{ product.UomCode2 }}</td>
+            <td *ngIf="delivery.DocCur=='MXN'"><strong>{{product.LineTotal |number : '1.2' }} MXN</strong></td>
+            <td *ngIf="delivery.DocCur=='USD'"><strong>{{product.TotalFrgn| number : '1.2' }} USD</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" rowspan="3"></td>
+          </tr>
+
+          <tr>
+            <td><label>Valor Bruto</label></td>
+            <td *ngIf="delivery.DocCur=='MXN'"><strong>{{delivery.DocTotal  | number : '1.2'}} {{delivery.DocCur}}</strong></td>
+            <td *ngIf="delivery.DocCur=='USD'"><strong>{{delivery.DocTotalFC  | number : '1.2'}} {{delivery.DocCur}}</strong></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

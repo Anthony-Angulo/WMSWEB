@@ -1,0 +1,15 @@
+<app-header *ngIf="currentUser"></app-header>
+
+<aside *ngIf="currentUser" class="sidebar">
+  <app-menu-sidebar></app-menu-sidebar>
+</aside>
+
+<section [ngClass]="{'content': currentUser }">
+<div class="card">
+  <router-outlet></router-outlet>
+</div>
+</section>
+
+<ngx-spinner>
+  <p style="font-size: 20px; color: white">Cargando...</p>
+</ngx-spinner>

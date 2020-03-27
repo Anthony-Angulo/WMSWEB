@@ -1,0 +1,50 @@
+<div>
+  <div class="row" style="margin: 0 !important;height: -webkit-fill-available;">
+
+
+    <div class="col-xl-8 col-sm-8 col-12" style="padding: 0 !important;">
+      <img src="assets/images/Power.png" style="max-width: 100%; height: auto;" class="img-fluid"
+        alt="Responsive image">
+    </div>
+
+
+
+
+    <div class="col-xl-4 col-sm-4 col-12" style="padding: 0 !important;">
+      <div class="card mx-auto" style="height: 100%;">
+        <div class="card-body">
+          <div style="text-align: center; vertical-align: middle;">
+            <div style="font-size: 40px">
+              CCFNWMS
+            </div>
+            WMS<br>
+            Comercial de Carnes Frias del Noroeste
+          </div>
+          <br>
+          <h5 class="card-title">Login</h5>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="email">Usuario</label>
+              <input id="email" type="text" formControlName="email" class="form-control" name="email" autofocus/>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" formControlName="password" class="form-control" />
+            </div>
+            <div class="form-group">
+              <button [disabled]="loading" class="btn btn-primary">Ingresar</button>
+              <img *ngIf="loading" class="pl-3"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </div>
+          </form>
+          <p class="card-text"><small class="text-muted">
+              Soporte<br>
+              soporte.sistemas@superchivas.com.mx<br>
+              +52 686 2626109<br>
+              www.helpdesk.ccfn.com
+            </small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="header">
+  <button class="btn btn-primary btn-right" (click)="backClicked()">Back</button>
+  <h2>Solicitud de Translado</h2>
+</div>
+
+<div class="body">
+  <div class="row">
+
+    <div class="col-6">
+      <label>Sucursal Origen</label>
+      <select class="form-control" [(ngModel)]="fromWarehouse" (ngModelChange)="warehouseChange()">
+        <option [ngValue]="warehouse" *ngFor="let warehouse of fromWarehouseList">
+          {{ warehouse.WhsName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal Destino</label>
+      <select class="form-control" [(ngModel)]="toWarehouse">
+        <option [ngValue]="warehouse" *ngFor="let warehouse of toWarehouseList">
+          {{ warehouse.WhsName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-6">
+      <label>Observacion</label>
+      <input class="form-control" type="text" [(ngModel)]="comments">
+    </div>
+
+    <div class="col-6">
+      <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+      <button type="button" class="btn btn-info" (click)="upload()">Subir</button>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-12 subtitle">
+      <button (click)="openModal('products-modal')" class="btn btn-primary btn-right">Buscar Producto</button>
+      <h2>Productos</h2>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <th>Codigo</th>
+        <th>Productos</th>
+        <th>Primera UM</th>
+        <th>Cantidad UM</th>
+        <th>Cantidad SU</th>
+        <th>Stock</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products; let index=index" class="table">
+          <td>{{ product.ItemCode }}</td>
+          <td>{{ product.ItemName }}</td>
+          <td>
+            <select class="form-control" [(ngModel)]="product.selectedUM">
+              <option [ngValue]="um" *ngFor="let um of product.uom">{{ um.UomCode }}</option>
+            </select>
+          </td>
+          <td><input class="form-control" [(ngModel)]="product.Quantity" type="number"></td>
+          <td>{{ (product.Quantity * product.selectedUM.BaseQty).toFixed(2) }} {{ product.selectedUM.BaseCode }}</td>
+          <td>{{ product.OnHand }}</td>
+          <td><i class="material-icons" (click)="removeProduct(index)">clear</i></td>
+        </tr>
+
+        <tr>
+          <td colspan="5" rowspan="3"></td>
+        </tr>
+
+        <tr>
+          <td><label>Cantidad de Productos</label></td>
+          <td>{{ products.length }}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <button [disabled]="!products.length" class="btn btn-primary" (click)="createRequest()">Crear</button>
+
+</div>
+
+<app-modal id="products-modal">
+  <h1>Products</h1>
+  <div class="table-responsive">
+    <table datatable #dtProducts [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <tfoot>
+        <tr>
+          <th><input type="text" class="form-control" placeholder="Buscar Codigo de Producto" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Producto" /></th>
+          <th><input type="text" class="form-control" placeholder="Stock" /></th>
+        </tr>
+        <tfoot>
+    </table>
+  </div>
+  <button class="btn" (click)="closeModal('products-modal')">Close</button>
+</app-modal>

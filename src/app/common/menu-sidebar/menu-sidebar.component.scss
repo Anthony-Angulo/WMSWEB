@@ -1,0 +1,97 @@
+ul {
+    padding: 0;
+    // list-style: none;
+}
+
+a {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    padding: 10px 13px;
+    color: #333;
+}
+
+span {
+    margin: 7px 0 7px 12px;
+    color: #333;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+// .material-icons {
+//     margin-top: 4px;
+//     color: #747474;
+// }
+
+li ul li {
+    padding-left: 15px;
+    // padding-left: 30px;padding-top: 7px;padding-bottom: 7px;
+}
+
+.menu-toggle:before {
+        content: '+';
+}
+
+.menu-toggle:after, .menu-toggle:before {
+        position: absolute;
+        top: calc(50% - 14px);
+        right: 17px;
+	font-size: 19px;
+}
+
+// .header {
+//     background: #eee;
+//     font-size: 12px;
+//     font-weight: 600;
+//     padding: 8px 16px;
+// }
+
+
+
+// /*
+//   * Sidebar
+//   */
+
+//   .sidebar {
+//     position: fixed;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 100; /* Behind the navbar */
+//     padding: 48px 0 0; /* Height of navbar */
+//     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+//   }
+
+//   .sidebar-sticky {
+//     position: relative;
+//     top: 0;
+//     height: calc(100vh - 48px);
+//     padding-top: .5rem;
+//     overflow-x: hidden;
+//     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+//   }
+
+//   .sidebar .nav-link {
+//     font-weight: 500;
+//     color: #333;
+//   }
+
+//   /*
+//     * Content
+//     */
+
+//   [role="main"] {
+//     padding-top: 48px; /*Space for fixed navbar */
+//   }
+
+//   /*
+//     * Navbar
+//     */
+
+//   .navbar-brand {
+//     padding-top: .75rem;
+//     padding-bottom: .75rem;
+//     font-size: 1rem;
+//     background-color: rgba(0, 0, 0, .25);
+//     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+//   }

@@ -1,0 +1,103 @@
+
+
+<!--TODO: STYLE-->
+
+<h4 style="padding-left: 20px;padding-top: 10px; padding-bottom: 10px;border-bottom: 2px solid #000;">{{ currentUser.warehouseName }}</h4>
+
+<ul style="height: calc(70vh - 100px);z-index: 1000000;">
+
+  <li>
+    <a routerLink="/dashboard"><span>Dashboard</span></a>
+  </li>
+
+  <li><!-- *ngIf="canEnter(transferRol)"-->
+    <a class="menu-toggle pointer" data-toggle="collapse" aria-expanded="false" data-target="#TransferSubmenu">
+      <span>Transferencias</span>
+    </a>
+    <ul class="collapse" id="TransferSubmenu">
+      <li>
+        <a routerLink="/InventoryTransfer/Request/Create">
+          <span>Generar Solicitud</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/InventoryTransfer/Request">
+          <span>Lista Solicitud de Translado</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/InventoryTransfer">
+          <span>Lista Transferenias</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a class="menu-toggle pointer" data-toggle="collapse" aria-expanded="false" data-target="#BuySubmenu">
+      <span>Compras</span>
+    </a>
+    <ul class="collapse" id="BuySubmenu">
+      <li>
+        <a routerLink="/purchaseOrder">
+          <span>Lista Ordenes de Compra</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/purchaseOrder/DeliveryList">
+          <span>Lista Entrada de Mercancia</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a class="menu-toggle pointer" data-toggle="collapse" aria-expanded="false" data-target="#VentasSubmenu">
+      <span>Ventas</span>
+    </a>
+    <ul class="collapse" id="VentasSubmenu">
+      <li>
+        <a routerLink="/order">
+          <span>Lista Ordenes de Venta</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/order/DeliveryList">
+          <span>Lista Entregas</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a class="menu-toggle pointer" aria-expanded="false" data-toggle="collapse" data-target="#InventarioSubmenu">
+      <span>Inventario</span>
+    </a>
+    <ul class="collapse" id="InventarioSubmenu">
+      <li>
+        <a routerLink="/">
+          <span>Generar Reporte de Inventario</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/">
+          <span>Lista de Reportes de Inventario</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/">
+          <span>Stock</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+</ul>
+<p>
+  <small>
+    Soporte<br>
+    soporte.sistemas@superchivas.com.mx<br>
+    +52 686 2626109<br>
+    www.helpdesk.ccfn.com
+  </small>
+</p>
