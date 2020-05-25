@@ -1,1 +1,283 @@
-<p>inventory-transfer-request-detail works!</p>
+<div class="header">
+  <button (click)="backClicked()" class="btn btn-primary btn-right">Regresar</button>
+  <h2>Solicitud de Transferencia - Detalle</h2>
+</div>
+
+<div class="body">
+  <div class="row" *ngIf="InventoryTransferRequest">
+
+    <div class="col-12 subtitle">
+      <h2>Información Basica</h2>
+    </div>
+
+    <div class="col-sm-6">
+      <label>Numero de Documento</label>
+      {{InventoryTransferRequest.DocNum}}
+    </div>
+
+    <div class="col-6">
+      <label>Status</label>
+      {{InventoryTransferRequest.DocStatus}}
+    </div>
+
+    <div class="col-sm-6">
+      <label>Sucursal Origen</label>
+      {{InventoryTransferRequest.WhsNameOrigin}}
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal Destino</label>
+      {{InventoryTransferRequest.WhsNameDest}}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha del Documento</label>
+      {{InventoryTransferRequest.DocDate }}
+    </div>
+
+    <div class="col-12 subtitle">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="products-tab" data-toggle="tab" href="#products" role="tab" aria-controls="products" aria-selected="true"><h6>Productos</h6></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="transfers-tab" data-toggle="tab" href="#transfers" role="tab" aria-controls="transfers" aria-selected="false"><h6>Tranferencias</h6></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false"><h6>Todos</h6></a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content col-12">
+
+      <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
+        <div class="table-responsive col-12">
+          <table class="table">
+            <thead>
+              <th>Producto</th>
+              <th>Descripcion</th>
+              <th>Cantidad</th>
+              <th>Unidad de Medida</th>
+              <th>Status</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of InventoryTransferRequest.Lines">
+                <td>{{ product.ItemCode }}</td>
+                <td>{{ product.Dscription }}</td>
+                <td>{{ product.Quantity }}</td>
+                <td>{{ product.UomCode }}</td>
+                <td>{{ product.LineStatus }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="transfers-tab">
+        <div class="card-body">
+          <div class="row" *ngIf="InventoryTransferRequest.TransferList">
+            <div class="col-6">
+              Transferencia
+            </div>
+            <div class="col-6">
+              Solicitud
+            </div>
+          </div>
+          <div class="row" *ngFor="let transfer of InventoryTransferRequest.TransferList" >
+            <div class="col-6">
+              <div class="card">
+                <div class="card-body" routerLink="/InventoryTransfer/{{transfer.DocEntry}}">
+                  <h5 class="card-title">{{ transfer.DocNum }}</h5>
+                  <p class="card-text">
+                    {{ transfer.DocDate }}
+                    <!-- <button type="button" class="btn btn-light" (click)="print(transfer);$event.stopPropagation();">Impresion</button> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div *ngIf="transfer.Request != undefined; then thenBlock else elseBlock"></div>
+              <ng-template #thenBlock>
+                <div class="card" routerLink="/InventoryTransfer/Request/{{transfer.Request.DocEntry}}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ transfer.Request?.DocNum }}</h5>
+                    <p class="card-text">{{ transfer.Request.DocDate }}</p>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template #elseBlock>
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">No tiene Solicitud Copia Para Recepcion</h5>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+        <div class="table-responsive col-12">
+          <table class="table">
+            <thead>
+              <th>Producto</th>
+              <th>Descripcion</th>
+              <th>Cantidad</th>
+              <th>Unidad de Medida</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of AllProducts">
+                <td>{{ row.ItemCode }}</td>
+                <td>{{ row.Dscription }}</td>
+                <td>{{ row.Quantity }}</td>
+                <td>{{ row.UomCode }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+
+<!--
+<div *ngIf="data">
+  <div class="row justify-content-center">
+
+
+
+  </div>
+
+
+
+  <div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Productos
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Descripcion</th>
+                  <th>Cantidad</th>
+                  <th>Unidad de Medida</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of data.WTQ1">
+                  <td>{{ row.ItemCode }}</td>
+                  <td>{{ row.Dscription }}</td>
+                  <td>{{ row.Quantity }}</td>
+                  <td>{{ row.UomCode }}</td>
+                  <td>{{ (row.LineStatus=='O') ? 'Abierta' : 'Cerrada' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Transferencias
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div class="card-body">
+          <div class="row" *ngIf="data.Transfers">
+            <div class="col-6">
+              Transferencia
+            </div>
+            <div class="col-6">
+              Solicitud
+            </div>
+          </div>
+          <div class="row" *ngFor="let transfer of data.Transfers" style="margin: 1em;">
+            <div class="col-6">
+              <div class="card" (click)="openModal(transfer)" style="cursor: pointer;">
+                <div class="card-body">
+                  <h5 class="card-title">{{ transfer.DocNum }}</h5>
+                  <p class="card-text">
+                    {{ transfer.DocDate | dateSAP }}
+                    <button type="button" class="btn btn-light"
+                      (click)="print(transfer);$event.stopPropagation();">Impresion</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div *ngIf="transfer.Request != undefined; then thenBlock else elseBlock"></div>
+              <ng-template #thenBlock>
+                <div class="card" routerLink="/transferRequestDetail/{{transfer.Request.DocEntry}}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ transfer.Request?.DocNum }}</h5>
+                    <p class="card-text">{{ transfer.Request?.DocDate | dateSAP }}</p>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template #elseBlock>
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">No tiene Solicitud Copia Para Recepcion</h5>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Conglomerado
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Descripcion</th>
+                  <th>Cantidad</th>
+                  <th>Unidad de Medida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of all">
+                  <td>{{ row.ItemCode }}</td>
+                  <td>{{ row.Dscription }}</td>
+                  <td>{{ row.Quantity }}</td>
+                  <td>{{ row.UomCode }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> -->

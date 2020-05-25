@@ -4,9 +4,12 @@
 
 export const environment = {
   production: false,
-  apiCRM: 'http://192.168.101.23:8080/public/api',
+  // apiCRM: 'http://192.168.101.23:8080/public/api',
   apiWMS: 'http://192.168.101.23:8081/public/api',
-  apiSAP: 'http://192.168.101.23:5002/api'
+  apiSAP: 'http://192.168.101.23:5002/api',
+  apiCRM: 'http://crm.ccfnweb.com.mx/apicrm/public/api',
+  // apiWMS: 'http://crm.ccfnweb.com.mx/apiwms/public/api',
+  // apiSAP: 'http://192.168.0.10:8886/api'
 };
 
 /*

@@ -1,5 +1,5 @@
 <div class="header">
-  <!-- <button class="btn btn-primary btn-right" routerLink="/orders/create">Crear Pedido</button> -->
+  <button class="btn btn-primary btn-right" (click)="printOrders()" >Imprimir</button>
   <h2>Lista de Pedidos</h2>
 </div>
 
@@ -8,6 +8,7 @@
     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <tfoot>
         <tr>
+          <th></th>
           <th><input type="text" class="form-control" placeholder="Buscar Numero de Orden" /></th>
           <th><input type="text" class="form-control" placeholder="Buscar Creador Por" /></th>
           <th><input type="text" class="form-control" placeholder="Buscar Contacto" /></th>

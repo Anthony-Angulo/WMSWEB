@@ -1,1 +1,31 @@
-<p>products works!</p>
+<div class="header">
+  <div class="right">
+    <select class="form-control" [(ngModel)]="propertySelected" (ngModelChange)="filterChange()">
+      <option [ngValue]="property" *ngFor="let property of propertyList">
+        {{ property.ItmsGrpNam }}
+      </option>
+    </select>
+  </div>
+  <div class="right">
+    <select class="form-control" [(ngModel)]="warehouseSelected" (ngModelChange)="filterChange()">
+      <option [ngValue]="warehouse" *ngFor="let warehouse of warehouseList">
+        {{ warehouse.WhsName }}
+      </option>
+    </select>
+  </div>
+  <h2>Productos</h2>
+</div>
+
+<div class="body">
+  <div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <tfoot>
+        <tr>
+          <th><input type="text" class="form-control" placeholder="Buscar Codigo" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Producto" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Stock" /></th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

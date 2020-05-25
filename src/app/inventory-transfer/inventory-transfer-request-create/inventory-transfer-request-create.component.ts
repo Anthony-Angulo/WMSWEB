@@ -15,6 +15,24 @@ interface WarehouseTSR {
   WhsName: string;
 }
 
+interface Product {
+  ItemName: string;
+  ItemCode: string;
+  PesProm: number;
+  OnHand: number;
+  Quantity: number;
+  UOMList: UOMDetail[];
+  SelectedUOM: UOMDetail;
+}
+
+interface UOMDetail {
+  BaseUom: number;
+  BaseCode: string;
+  UomEntry: number;
+  UomCode: string;
+  BaseQty: number;
+}
+
 @Component({
   selector: 'app-inventory-transfer-request-create',
   templateUrl: './inventory-transfer-request-create.component.html',
@@ -116,22 +134,21 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
   selectProduct(ItemCode, quantity?: number) {
     return this.http.get(`${environment.apiSAP}/products/ToTransfer/${ItemCode}/${this.fromWarehouse.WhsCode}`)
       .toPromise()
-      .then((data: any) => {
-        console.log(data)
-        const product = data;
-        product.uom = data.uom.filter(uom => uom.UomEntry != '7');
-        if (Number(product.U_IL_PesProm) != 0 && product.uom.length == 1 && product.uom[0].BaseUom == 6) {
-          const caja = {
-            BASEUOM: 'KG',
-            BaseQty: product.U_IL_PesProm,
+      .then((product: Product) => {
+        // console.log(data)
+        product.UOMList = product.UOMList.filter(uom => uom.UomEntry != 7);
+        if (product.PesProm != 0 && product.UOMList.length == 1 && product.UOMList[0].BaseUom == 6) {
+          const uombox: UOMDetail = {
+            BaseCode: 'KG',
+            BaseQty: product.PesProm,
             BaseUom: 6,
             UomCode: 'Caja',
             UomEntry: -2
           };
-          product.uom.push(caja);
+          product.UOMList.push(uombox);
         }
-        product.selectedUM = product.uom[0];
-        if (!product.selectedUM.BASEUOM) {
+        product.SelectedUOM = product.UOMList[0];
+        if (!product.SelectedUOM.BaseCode) {
           this.toastr.error('El Producto no tiene unidad de medida valida');
           return;
         }

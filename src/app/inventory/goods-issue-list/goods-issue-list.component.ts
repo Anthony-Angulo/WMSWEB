@@ -5,26 +5,26 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-purchase-order-list',
-  templateUrl: './purchase-order-list.component.html',
-  styleUrls: ['./purchase-order-list.component.scss']
+  selector: 'app-goods-issue-list',
+  templateUrl: './goods-issue-list.component.html',
+  styleUrls: ['./goods-issue-list.component.css']
 })
-export class PurchaseOrderListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(DataTableDirective) datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<PurchaseOrderListComponent> = new Subject();
+  dtTrigger: Subject<GoodsIssueListComponent> = new Subject();
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     let orderUrl;
-    // TODO: Warehouse List
+
     if (user && user.warehouseCode) {
-      orderUrl = `${environment.apiSAP}/purchaseOrder/search`;
+      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
     } else {
-      orderUrl = `${environment.apiSAP}/purchaseOrder/search`;
+      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
     }
 
     this.dtOptions = {
@@ -43,10 +43,8 @@ export class PurchaseOrderListComponent implements OnInit, AfterViewInit, OnDest
       },
       columns: [
         { title: 'Numero de Documento', data: 'DocNum' },
-        { title: 'Nombre Fantasia', data: 'CardFName' },
-        { title: 'Contacto', data: 'CardName' },
         { title: 'Sucursal', data: 'WhsName' },
-        { title: 'Estado', data: 'DocStatus' },
+        { title: 'Status', data: 'DocStatus' },
         { title: 'Fecha', data: 'DocDate' },
       ],
       language: {
@@ -60,7 +58,7 @@ export class PurchaseOrderListComponent implements OnInit, AfterViewInit, OnDest
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/purchaseOrder/' + data.DocEntry]);
+          this.router.navigate(['/Inventory/Issue/' + data.DocEntry]);
         });
         return row;
       },
@@ -89,3 +87,4 @@ export class PurchaseOrderListComponent implements OnInit, AfterViewInit, OnDest
   }
 
 }
+

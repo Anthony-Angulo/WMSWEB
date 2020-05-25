@@ -1,1 +1,229 @@
-<p>inventory-request-detail works!</p>
+<div class="header">
+  <!-- <button (click)="backClicked()" class="btn btn-primary btn-right">Back</button> -->
+  <h2>Inventario - Detalle</h2>
+</div>
+
+<!-- <button type="button" class="btn btn-light" (click)="backClicked()"></button> -->
+
+<div class="body" *ngIf="order">
+
+  <div class="col-sm-6">
+    <label>Numero de Inventario:</label>
+    {{ order.id }}
+  </div>
+  <div class="col-sm-6">
+    <label>Responsable:</label>
+    {{ order.EmployeeName }}
+  </div>
+  <div class="col-sm-6">
+    <label>Fecha de documento:</label>
+    {{ order.created_at }}
+  </div>
+  <div class="col-sm-6">
+    <label>Status:</label>
+    {{(order.InventoryStatus == 0) ? 'Creado' : (order.InventoryStatus == 1) ? 'Abierto' : 'Cerrado'}}
+  </div>
+
+  <!-- <select class="custom-select" (change)="propertyChange($event.target.value)">
+    <option *ngFor="let property of properties">{{property}}</option>
+  </select>
+  <button *ngIf="canClose" type="button" (click)="close()" class="btn btn-danger">Cerrar</button>
+  <button *ngIf="order.InventoryStatus == 0" type="button" (click)="begin()" class="btn btn-primary">Empezar</button>
+  <button *ngIf="order.InventoryStatus != 2" type="button" (click)="updateStock()" class="btn btn-primary">Actualizar Stock</button>
+  <button (click)="generateEXCEL()" class="btn btn-primary">Generar Excel</button> -->
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Almacen</th>
+          <th>Numero de Articulo</th>
+          <th>Descripcion del Articulo</th>
+          <th>Cant. Teorica</th>
+          <th>Cant. Contada</th>
+          <th>Desviacion</th>
+          <th>UM1</th>
+          <th>Cant. Teorica2</th>
+          <th>Cant. Contada2</th>
+          <th>Desviacion2</th>
+          <th>UM2</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th>Moneda</th>
+          <th>Cerrado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of products" style="cursor: pointer" >
+          <td>{{ row.warehouseCode }}</td>
+          <td>{{ row.ItemCode }}</td>
+          <td>{{ row.ItemName }}</td>
+
+          <td>{{ row.InvQuantity }}</td>
+          <td>{{ row.Quantity }}</td>
+          <td>{{ (row.Quantity - row.InvQuantity).toFixed(2) }}</td>
+          <td>{{ row.UomCode1 }}</td>
+
+          <div *ngIf="row.IUoMEntry == 6 && row.ManejaLote == 'Y' && row.TipoPeso == 'V'; then thenBlock else elseBlock"></div>
+
+          <ng-template #thenBlock>
+
+            <td>{{ (row.InvQuantity / (row.U_IL_PesProm == 0 ? 1 : row.U_IL_PesProm)).toFixed(2) }}</td>
+            <!-- <td>{{ getQuantity2(row) }}</td> -->
+            <!-- <td>{{ (getQuantity2(row) - (row.InvQuantity / (row.U_IL_PesProm == 0 ? 1 : row.U_IL_PesProm))).toFixed(2) }}</td> -->
+            <td>Caja</td>
+
+          </ng-template>
+
+          <ng-template #elseBlock>
+
+            <td>{{ (row.InvQuantity / row.NumInSale).toFixed(2) }}</td>
+            <td>{{ (row.Quantity / row.NumInSale).toFixed(2) }}</td>
+            <td>{{ ((row.Quantity - row.InvQuantity) / row.NumInSale).toFixed(2) }}</td>
+            <td>{{ row.UomCode2 }}</td>
+
+          </ng-template>
+
+          <td>{{ row.Price }}</td>
+          <td>{{ (row.Price * row.Quantity).toFixed(4) }}</td>
+          <td>{{ row.Currency }}</td>
+          <td>{{ (row.Status == 0) ? 'Abierto' : 'Cerrado' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="body">
+  <div class="row" *ngIf="order">
+
+    <div class="col-12 subtitle">
+      <h2>Información Basica</h2>
+    </div>
+
+    <div class="col-sm-6">
+      <label>Numero de Pedido</label>
+      {{order.DocNum}}
+    </div>
+
+    <div class="col-sm-6">
+      <label>Contacto</label>
+      {{order.CardName}}
+    </div>
+
+    <div class="col-6">
+      <label>Codigo de Cliente</label>
+      {{order.CardCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor</label>
+      {{order.SlpName}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor id</label>
+      {{order.SlpCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha del Pedido</label>
+      {{order.DocDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de vencimiento</label>
+      {{order.CancelDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de Entrega</label>
+      {{order.DocDueDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Estatus de Pedido</label>
+      {{order.DocStatus}}
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal que Surte</label>
+      {{order.WhsName}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Facturación</label>
+      {{order.Address}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Envio</label>
+      {{order.Address2}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Forma de Pago</h2>
+    </div>
+
+    <div class="col-4">
+      <label>Moneda</label>
+      {{order.DocCur}}
+    </div>
+
+    <div class="col-4">
+      <label>Pago</label>
+      {{order.PymntGroup}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Notas</h2>
+    </div>
+
+    <div class="col-12">
+      <label>Comentarios</label>
+      {{order.Comments}}
+    </div>
+
+
+    <div class="col-12 subtitle">
+      <h2>Productos y Servicios</h2>
+    </div>
+
+    <div class="table-responsive col-12">
+      <table class="table">
+        <thead>
+          <th>Codigo</th>
+          <th>Productos </th>
+          <th>Costo Unit </th>
+          <th>Cantidad PU</th>
+          <th>Cantidad SU </th>
+          <th>Total linea</th>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let product of order.OrderRows">
+            <td>{{ product.ItemCode }}</td>
+            <td>{{ product.Dscription }}</td>
+            <td>{{ product.Price  }} {{ product.Currency }}</td>
+            <td>{{ product.Quantity  }} {{ product.UomCode }}</td>
+            <td>{{ product.InvQty }} {{ product.UomCode2 }}</td>
+            <td><strong>{{ product.Total }} {{order.DocCur}}</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" rowspan="3"></td>
+          </tr>
+
+          <tr>
+            <td><label>Valor Bruto</label></td>
+            <td><strong>{{order.Total }} {{order.DocCur}}</strong></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div> -->

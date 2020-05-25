@@ -35,7 +35,6 @@
     </div>
   </div>
 
-
   <div class="row">
     <div class="col-12 subtitle">
       <button (click)="openModal('products-modal')" class="btn btn-primary btn-right">Buscar Producto</button>
@@ -59,12 +58,12 @@
           <td>{{ product.ItemCode }}</td>
           <td>{{ product.ItemName }}</td>
           <td>
-            <select class="form-control" [(ngModel)]="product.selectedUM">
-              <option [ngValue]="um" *ngFor="let um of product.uom">{{ um.UomCode }}</option>
+            <select class="form-control" [(ngModel)]="product.SelectedUOM">
+              <option [ngValue]="um" *ngFor="let um of product.UOMList">{{ um.UomCode }}</option>
             </select>
           </td>
           <td><input class="form-control" [(ngModel)]="product.Quantity" type="number"></td>
-          <td>{{ (product.Quantity * product.selectedUM.BaseQty).toFixed(2) }} {{ product.selectedUM.BaseCode }}</td>
+          <td>{{ (product.Quantity * product.SelectedUOM.BaseQty).toFixed(2) }} {{ product.SelectedUOM.BaseCode }}</td>
           <td>{{ product.OnHand }}</td>
           <td><i class="material-icons" (click)="removeProduct(index)">clear</i></td>
         </tr>
