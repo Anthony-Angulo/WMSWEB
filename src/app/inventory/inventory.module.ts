@@ -4,41 +4,35 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { DataTablesModule } from 'angular-datatables';
 
-import { GoodsIssueDetailComponent } from './goods-issue-detail/goods-issue-detail.component';
-import { GoodsIssueListComponent } from './goods-issue-list/goods-issue-list.component';
-import { GoodsReceiptDetailComponent } from './goods-receipt-detail/goods-receipt-detail.component';
-import { GoodsReceiptListComponent } from './goods-receipt-list/goods-receipt-list.component';
-import { InventoryRequestCreateComponent } from './inventory-request-create/inventory-request-create.component';
-import { InventoryRequestDetailComponent } from './inventory-request-detail/inventory-request-detail.component';
-import { InventoryRequestListComponent } from './inventory-request-list/inventory-request-list.component';
 import { ProductsComponent } from './products/products.component';
+import { ModalModule } from '../common/modal/modal.module';
 
 
 const routes: Routes = [
   { path: 'Products', component: ProductsComponent },
-  { path: 'Create', component: InventoryRequestCreateComponent },
-  { path: 'ReceiptList', component: GoodsReceiptListComponent },
-  { path: 'IssueList', component: GoodsIssueListComponent },
-  { path: 'Receipt/:id', component: GoodsReceiptDetailComponent },
-  { path: 'Issue/:id', component: GoodsIssueDetailComponent },
-  { path: ':id', component: InventoryRequestDetailComponent },
-  { path: '', component: InventoryRequestListComponent },
+  {
+    path: 'InventoryRequest',
+    loadChildren: () => import('./inventory-request/inventory-request.module').then(m => m.InventoryRequestModule)
+  },
+  {
+    path: 'GoodsReceipt',
+    loadChildren: () => import('./goods-receipt/goods-receipt.module').then(m => m.GoodsReceiptModule)
+  },
+  {
+    path: 'GoodsIssue',
+    loadChildren: () => import('./goods-issue/goods-issue.module').then(m => m.GoodsIssueModule)
+  },
+  { path: '',   redirectTo: '/InventoryRequest', pathMatch: 'full' },
 ];
 
 @NgModule({
   declarations: [
     ProductsComponent,
-    InventoryRequestCreateComponent,
-    InventoryRequestListComponent,
-    InventoryRequestDetailComponent,
-    GoodsReceiptListComponent,
-    GoodsIssueListComponent,
-    GoodsIssueDetailComponent,
-    GoodsReceiptDetailComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    // ModalModule,
     DataTablesModule,
     RouterModule.forChild(routes)
   ]

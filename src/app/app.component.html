@@ -1,10 +1,10 @@
-<app-header *ngIf="currentUser"></app-header>
+<app-header *ngIf="router.url !='/login'"></app-header>
 
-<aside *ngIf="currentUser" class="sidebar">
+<aside *ngIf="router.url !='/login'" class="sidebar">
   <app-menu-sidebar></app-menu-sidebar>
 </aside>
 
-<section [ngClass]="{'content': currentUser }">
+<section [ngClass]="{'content': router.url !='/login' }">
 <div class="card">
   <router-outlet></router-outlet>
 </div>

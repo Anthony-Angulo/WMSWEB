@@ -5,15 +5,15 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-goods-issue-list',
-  templateUrl: './goods-issue-list.component.html',
-  styleUrls: ['./goods-issue-list.component.css']
+  selector: 'app-goods-receipt-list',
+  templateUrl: './goods-receipt-list.component.html',
+  styleUrls: ['./goods-receipt-list.component.scss']
 })
-export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GoodsReceiptListComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   @ViewChild(DataTableDirective) datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<GoodsIssueListComponent> = new Subject();
+  dtTrigger: Subject<GoodsReceiptListComponent> = new Subject();
 
   constructor(private router: Router) { }
 
@@ -22,9 +22,9 @@ export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy
     let orderUrl;
 
     if (user && user.warehouseCode) {
-      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
+      orderUrl = `${environment.apiSAP}/GoodsReceipt/search`;
     } else {
-      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
+      orderUrl = `${environment.apiSAP}/GoodsReceipt/search`;
     }
 
     this.dtOptions = {
@@ -58,7 +58,7 @@ export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/Inventory/Issue/' + data.DocEntry]);
+          this.router.navigate(['/Inventory/Receipt/' + data.DocEntry]);
         });
         return row;
       },
@@ -87,4 +87,3 @@ export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
 }
-

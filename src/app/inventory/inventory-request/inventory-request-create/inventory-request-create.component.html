@@ -1,0 +1,105 @@
+<div class="header">
+  <button class="btn btn-primary btn-right" (click)="backClicked()">Regresar</button>
+  <h2>Toma de Inventario</h2>
+</div>
+
+<div class="body">
+  <div class="row">
+
+    <div class="col-6">
+      <label>Sucursal</label>
+      <select class="form-control" [(ngModel)]="warehouseSelected">
+        <option [ngValue]="warehouse" *ngFor="let warehouse of warehouseList">
+          {{ warehouse.WhsName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-6">
+      <label>Tipo de Inventario</label>
+      <select class="form-control" [(ngModel)]="modeSelected">
+        <option [ngValue]="mode.id" *ngFor="let mode of optionsMode">
+          {{ mode.display }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-6">
+      <label>Responsable de Inventario</label>
+      {{ userSelected?.name }}
+    </div>
+
+    <div class="col-6">
+      <button (click)="getUser();" class="btn btn-primary">Seleccionar Responsable</button>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="row">
+
+            <div class="col-6">
+              Responsable de Productos: {{ userLineSelected?.name }}
+            </div>
+            <div class="col-6">
+              <button (click)="getLineUser();" class="btn btn-primary">Seleccionar Responsable</button>
+            </div>
+
+            <div class="col-6">
+              Categoria:
+              <select class="custom-select" [(ngModel)]="propertySelected" (ngModelChange)="getProducts()">
+                <option [ngValue]="property" *ngFor="let property of propertyList">
+                  {{property.ItmsGrpNam}}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-6">
+            <button (click)="modalService.open('products-modal')" class="btn btn-primary btn-block">Buscar Productos</button>
+            <ul class="list-group list-group-flush" *ngFor="let product of productTempSelected; let index=index">
+              <li class="list-group-item">
+                {{ product.ItemName }}
+                <button type="button" style="float: right;" class="btn btn-default"
+                  (click)="deleteProduct(index, 'productTempSelected')">Eliminar</button>
+              </li>
+            </ul>
+          </div>
+            <div class="col">
+              <button [disabled]="productTempSelected.length==0 || !userLineSelected" (click)="addProducts()"
+                  class="btn btn-primary btn-block">Agregar a Reporte</button>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Encargado</th>
+          <th>---</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let product of productSelected; let index=index">
+          <td>{{ product.ItemName }}</td>
+          <td>{{ product.name }}</td>
+          <td><button type="button" class="btn btn-default" (click)="deleteProduct(index, 'productSelected')">Eliminar</button></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <button [disabled]="(modeSelected == 0 && productSelected.length==0) || !userSelected" (click)="createReport()"  class="btn btn-primary">Crear Reporte de Inventario</button>
+</div>
+
+<app-product-list [updateObservable]="updateSubject.asObservable()" (productSelected)="selectProducts($event)"></app-product-list>
+<app-user-list (userSelected)="selectUser($event)"></app-user-list>

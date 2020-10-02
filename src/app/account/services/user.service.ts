@@ -9,34 +9,43 @@ import { User } from '../interfaces/user';
 })
 export class UserService {
 
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<string>;
+  public currentUser: Observable<string>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('token'));
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): User {
+  public get currentUserValue(): string {
     return this.currentUserSubject.value;
   }
 
   login(email: string, password: string) {
-    return this.http.post(environment.apiCRM + '/login', { email, password }).toPromise()
+    return this.http.post(environment.apiCRM + '/Account/Login', { email, password })
+      .toPromise()
       .then((user: any) => {
-
-        if (user && user.token) {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-        }
-
+        localStorage.setItem('token', user.token);
         return user;
       }).catch(error => console.error(error));
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     this.currentUserSubject.next(null);
+  }
+
+  roleMatch(allowedRoles): boolean {
+    let isMatch = false;
+    const payLoad = JSON.parse(window.atob(localStorage.getItem('token').split('.')[1]));
+    const userRole = payLoad.role;
+    allowedRoles.forEach(element => {
+      if (userRole == element) {
+        isMatch = true;
+        return false;
+      }
+    });
+    return isMatch;
   }
 
 }

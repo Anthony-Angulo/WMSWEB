@@ -2,7 +2,7 @@
 
 <!--TODO: STYLE-->
 
-<h4 style="padding-left: 20px;padding-top: 10px; padding-bottom: 10px;border-bottom: 2px solid #000;">{{ currentUser.warehouseName }}</h4>
+<!-- <h4 style="padding-left: 20px;padding-top: 10px; padding-bottom: 10px;border-bottom: 2px solid #000;">{{ currentUser.warehouseName }}</h4> -->
 
 <ul style="height: calc(70vh - 100px);z-index: 1000000;">
 
@@ -75,12 +75,12 @@
     </a>
     <ul class="collapse" id="InventarioSubmenu">
       <li>
-        <a routerLink="/Inventory/Create">
+        <a routerLink="/Inventory/InventoryRequest/Create">
           <span>Generar Reporte de Inventario</span>
         </a>
       </li>
       <li>
-        <a routerLink="/Inventory">
+        <a routerLink="/Inventory/InventoryRequest">
           <span>Lista de Reportes de Inventario</span>
         </a>
       </li>
@@ -90,12 +90,12 @@
         </a>
       </li>
       <li>
-        <a routerLink="/Inventory/ReceiptList">
+        <a routerLink="/Inventory/GoodsReceipt">
           <span>Lista de Entradas de Mercancia</span>
         </a>
       </li>
       <li>
-        <a routerLink="/Inventory/IssueList">
+        <a routerLink="/Inventory/GoodsIssue">
           <span>Lista de Salida de Mercancia</span>
         </a>
       </li>

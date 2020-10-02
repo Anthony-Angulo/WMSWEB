@@ -1,0 +1,68 @@
+<!--
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Cantidad</th>
+          <th>Cantidad2</th>
+          <th>Encargado</th>
+          <th>Zona</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of row.details" (click)="detail.codes.length > 0 && openModal(detail.codes)" [ngStyle]="{'cursor':detail.codes.length > 0 ? 'pointer' : 'default' }">
+          <td><input type="number" [(ngModel)]="detail.Quantity2" [disabled]="row.ManejaLote != 'N'" (click)="$event.stopPropagation();"/> {{row.UomCode1}} </td>
+
+          <div *ngIf="row.IUoMEntry == 185 && row.ManejaLote == 'Y' && row.TipoPeso == 'V'; then thenBlock else elseBlock"></div>
+
+          <ng-template #thenBlock>
+            <td>{{ detail.codes.length }} Cajas</td>
+          </ng-template>
+
+          <ng-template #elseBlock>
+            <td>{{ (detail.Quantity / row.NumInSale).toFixed(2) }} {{ row.UomCode2 }}</td>
+          </ng-template>
+
+          <td>{{ detail.EmployeeName }}</td>
+          <td>{{ detail.Zone }}</td>
+          <td>{{ detail.created_at }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="row.ManejaLote == 'N'" class="modal-footer">
+  <button class="btn btn-primary" (click)="change()">Modificar</button>
+</div> -->
+
+<app-modal id="products-detail-modal">
+
+  <h1>Producto</h1>
+
+  <p>Producto: {{ Product?.ItemName }}</p>
+  <p>Descripcion: {{ Product?.ItemCode }}</p>
+
+  <!-- <p>Descripcion: {{ Product?.Detail | json }}</p> -->
+
+
+  <div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <tfoot>
+        <tr>
+          <th><input type="text" class="form-control" placeholder="Buscar Cantidad" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Cantidad2" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Encargado" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Zona" /></th>
+          <th><input type="text" class="form-control" placeholder="Buscar Fecha" /></th>
+        </tr>
+        <tfoot>
+    </table>
+  </div>
+
+  <!-- <button class="btn btn-danger" (click)="modalService.close('products-modal')">Close</button> -->
+  <!-- <button class="btn btn-success" (click)="SelectProducts()">Seleccionar</button> -->
+
+</app-modal>

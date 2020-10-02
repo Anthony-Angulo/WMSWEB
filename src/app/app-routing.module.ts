@@ -6,7 +6,7 @@ import { AuthGuard } from './account/guards/auth.guard';
 
 const routes: Routes = [
   { path: 'login', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: {permittedRoles:['Admin']} },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'purchaseOrder', loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule)},
   { path: 'order', loadChildren: () => import('./order/order.module').then(m => m.OrderModule)},

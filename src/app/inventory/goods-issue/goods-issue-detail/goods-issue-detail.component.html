@@ -1,10 +1,10 @@
 <div class="header">
   <button (click)="backClicked()" class="btn btn-primary btn-right">Regresar</button>
-  <h2>Transferencia - Detalle</h2>
+  <h2>Entrada de Mercancia - Detalle</h2>
 </div>
 
 <div class="body">
-  <div class="row" *ngIf="transfer">
+  <div class="row" *ngIf="goodsIssue">
 
     <div class="col-12 subtitle">
       <h2>Información Basica</h2>
@@ -12,46 +12,26 @@
 
     <div class="col-sm-6">
       <label>Numero de Documento</label>
-      {{transfer.DocNum}}
-    </div>
-
-    <div class="col-sm-6">
-      <label>Sucursal Origen</label>
-      {{transfer.Filler}}
-    </div>
-
-    <div class="col-6">
-      <label>Sucursal Destino</label>
-      {{transfer.ToWhsCode}}
+      {{goodsIssue.DocNum}}
     </div>
 
     <div class="col-6">
       <label>Fecha del Documento</label>
-      {{transfer.DocDate }}
+      {{goodsIssue.DocDate }}
     </div>
 
     <div class="col-6">
-      <label>Fecha de Entrega</label>
-      {{transfer.DocDueDate }}
+      <label>Estatus del Documento</label>
+      {{goodsIssue.DocStatus}}
     </div>
 
     <div class="col-6">
-      <label>Fecha de vencimiento</label>
-      {{transfer.CancelDate }}
+      <label>Sucursal que Surte</label>
+      {{goodsIssue.WhsName}}
     </div>
 
     <div class="col-12 subtitle">
-      <h2>Notas</h2>
-    </div>
-
-    <div class="col-12">
-      <label>Comentarios</label>
-      {{transfer.Comments}}
-    </div>
-
-
-    <div class="col-12 subtitle">
-      <h2>Productos y Servicios</h2>
+      <h2>Productos</h2>
     </div>
 
     <div class="table-responsive col-12">
@@ -63,15 +43,18 @@
           <th>Cantidad SU </th>
         </thead>
         <tbody>
-          <tr *ngFor="let product of transfer.TransferRows">
+
+          <tr *ngFor="let product of goodsIssue.Lines">
             <td>{{ product.ItemCode }}</td>
             <td>{{ product.Dscription }}</td>
-            <td>{{ product.Quantity }} {{ product.UomCode }}</td>
-            <td>{{ product.InvQty }} {{ product.UomCode2 }}</td>
+
+            <td>{{ product.Quantity | number : '1.2' }} {{ product.UomCode }}</td>
+
+            <td>{{ product.InvQty | number : '1.2'}} {{ product.UomCode2 }}</td>
           </tr>
+
         </tbody>
       </table>
     </div>
   </div>
 </div>
-

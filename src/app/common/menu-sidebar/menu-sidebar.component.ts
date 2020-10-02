@@ -12,9 +12,9 @@ export class MenuSidebarComponent implements OnInit {
   currentUser: User;
 
   constructor(private userService: UserService) {
-    this.userService.currentUser.subscribe(x => {
-      this.currentUser = x;
-    });
+    // this.userService.currentUser.subscribe(x => {
+    //   this.currentUser = x;
+    // });
   }
 
   ngOnInit(): void {

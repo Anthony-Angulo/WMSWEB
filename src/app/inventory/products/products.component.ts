@@ -49,7 +49,7 @@ export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.warehouseList = warehouse;
       this.warehouseSelected = this.warehouseList[0];
 
-      this.propertyList = properties.filter(p => ['5', '6', '7', '8'].includes(p.ItmsTypCod));
+      this.propertyList = properties.filter(p => [5, 6, 7, 8].includes(p.ItmsTypCod));
       this.propertyList.push({
         ItmsTypCod: '-1',
         ItmsGrpNam: 'Todos'

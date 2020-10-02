@@ -1,0 +1,236 @@
+<div class="header">
+  <button (click)="backClicked()" class="btn btn-primary btn-right">Regresar</button>
+  <h2>Inventario - Detalle</h2>
+</div>
+
+<div class="body">
+  <div class="row" *ngIf="Document">
+
+    <div class="col-6">
+      <label>Numero de Inventario:</label>
+      {{ Document.id }}
+    </div>
+
+    <div class="col-6">
+      <label>Responsable:</label>
+      {{ Document.EmployeeName }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de documento:</label>
+      {{ Document.created_at }}
+    </div>
+
+    <div class="col-6">
+      <label>Status:</label>
+      {{(Document.InventoryStatus == '0') ? 'Creado' : (Document.InventoryStatus == '1') ? 'Abierto' : 'Cerrado'}}
+    </div>
+
+    <div class="col-4">
+      <button (click)="generateExcel()" class="btn btn-success">Generar Excel</button>
+    </div>
+
+    <div class="col-4">
+      <button (click)="generateTxt()" class="btn btn-primary">Generar Txt</button>
+    </div>
+
+    <select class="custom-select" [(ngModel)]="PropertySelected" (ngModelChange)="propertyChange()">
+      <option [ngValue]="property" *ngFor="let property of PropertyList">{{ property.label }}</option>
+    </select>
+    <!-- <button *ngIf="canClose" type="button" (click)="close()" class="btn btn-danger">Cerrar</button>
+    <button *ngIf="Document.InventoryStatus == 0" type="button" (click)="begin()" class="btn btn-primary">Empezar</button>
+    <button *ngIf="Document.InventoryStatus != 2" type="button" (click)="updateStock()" class="btn btn-primary">Actualizar Stock</button> -->
+
+    <!-- <div class="table-responsive">
+      <table datatable #dtProducts [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <tfoot>
+          <tr>
+            <th></th>
+            <th><input type="text" class="form-control" placeholder="Buscar Codigo de Producto" /></th>
+            <th><input type="text" class="form-control" placeholder="Buscar Producto" /></th>
+          </tr>
+          <tfoot>
+      </table>
+    </div> -->
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-product-detail-list [updateObservable]="updateSubject.asObservable()"></app-product-detail-list>
+    </div>
+  </div>
+    <!-- <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Numero de Articulo</th>
+            <th>Descripcion del Articulo</th>
+            <th>Cant. Teorica</th>
+            <th>Cant. Contada</th>
+            <th>Desviacion</th>
+            <th>UM1</th>
+            <th>Cant. Teorica2</th>
+            <th>Cant. Contada2</th>
+            <th>Desviacion2</th>
+            <th>UM2</th>
+            <th>Precio</th>
+            <th>Total</th>
+            <th>Moneda</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ProductsDisplay" style="cursor: pointer" >
+            <td>{{ row.ItemCode }}</td>
+            <td>{{ row.ItemName }}</td>
+            <td>{{ row.InvQuantity }}</td>
+            <td>{{ row.Quantity }}</td>
+            <td>{{ row.Deviation }}</td>
+            <td>{{ row.UomCode1 }}</td>
+            <td>{{ row.InvQuantity2 }}</td>
+            <td>{{ row.Quantity2 }}</td>
+            <td>{{ row.Deviation2 }}</td>
+            <td>{{ row.Uom2Display }}</td>
+            <td>{{ row.Price }}</td>
+            <td>{{ row.Total }}</td>
+            <td>{{ row.CurrencyDisplay }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+</div>
+
+
+
+
+
+
+<!-- <div class="body">
+  <div class="row" *ngIf="Document">
+
+    <div class="col-12 subtitle">
+      <h2>Información Basica</h2>
+    </div>
+
+    <div class="col-sm-6">
+      <label>Numero de Pedido</label>
+      {{Document.DocNum}}
+    </div>
+
+    <div class="col-sm-6">
+      <label>Contacto</label>
+      {{Document.CardName}}
+    </div>
+
+    <div class="col-6">
+      <label>Codigo de Cliente</label>
+      {{Document.CardCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor</label>
+      {{Document.SlpName}}
+    </div>
+
+    <div class="col-6">
+      <label>Vendedor id</label>
+      {{Document.SlpCode}}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha del Pedido</label>
+      {{Document.DocDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de vencimiento</label>
+      {{Document.CancelDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Fecha de Entrega</label>
+      {{Document.DocDueDate }}
+    </div>
+
+    <div class="col-6">
+      <label>Estatus de Pedido</label>
+      {{Document.DocStatus}}
+    </div>
+
+    <div class="col-6">
+      <label>Sucursal que Surte</label>
+      {{Document.WhsName}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Facturación</label>
+      {{Document.Address}}
+    </div>
+
+    <div class="col-6">
+      <label>Dirección de Envio</label>
+      {{Document.Address2}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Forma de Pago</h2>
+    </div>
+
+    <div class="col-4">
+      <label>Moneda</label>
+      {{Document.DocCur}}
+    </div>
+
+    <div class="col-4">
+      <label>Pago</label>
+      {{Document.PymntGroup}}
+    </div>
+
+    <div class="col-12 subtitle">
+      <h2>Notas</h2>
+    </div>
+
+    <div class="col-12">
+      <label>Comentarios</label>
+      {{Document.Comments}}
+    </div>
+
+
+    <div class="col-12 subtitle">
+      <h2>Productos y Servicios</h2>
+    </div>
+
+    <div class="table-responsive col-12">
+      <table class="table">
+        <thead>
+          <th>Codigo</th>
+          <th>Productos </th>
+          <th>Costo Unit </th>
+          <th>Cantidad PU</th>
+          <th>Cantidad SU </th>
+          <th>Total linea</th>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let product of Document.DocumentRows">
+            <td>{{ product.ItemCode }}</td>
+            <td>{{ product.Dscription }}</td>
+            <td>{{ product.Price  }} {{ product.Currency }}</td>
+            <td>{{ product.Quantity  }} {{ product.UomCode }}</td>
+            <td>{{ product.InvQty }} {{ product.UomCode2 }}</td>
+            <td><strong>{{ product.Total }} {{Document.DocCur}}</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="4" rowspan="3"></td>
+          </tr>
+
+          <tr>
+            <td><label>Valor Bruto</label></td>
+            <td><strong>{{Document.Total }} {{Document.DocCur}}</strong></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div> -->

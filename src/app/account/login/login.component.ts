@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.f.email.value, this.f.password.value)
       .then(data => {
         console.log(data);
-        if (data.status) {
+        if (data) {
           window.location.reload();
         } else {
           this.f.password.reset();

@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from './common/header/header.module';
 import { MenuSidebarModule } from './common/menu-sidebar/menu-sidebar.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthInterceptor } from './account/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
       positionClass: 'toast-bottom-right'
     }),
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

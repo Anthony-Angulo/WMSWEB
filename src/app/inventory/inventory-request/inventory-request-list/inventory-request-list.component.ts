@@ -63,7 +63,7 @@ export class InventoryRequestListComponent implements OnInit, OnDestroy, AfterVi
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/Inventory/', data.id]);
+          this.router.navigate(['/Inventory/InventoryRequest', data.id]);
         });
         return row;
       },

@@ -1,0 +1,15 @@
+<app-modal id="user-modal">
+
+  <h1>Responsable</h1>
+  <div class="table-responsive">
+    <table datatable #dtProducts [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <tfoot>
+        <tr>
+          <th><input type="text" class="form-control" placeholder="Buscar" /></th>
+        </tr>
+        <tfoot>
+    </table>
+  </div>
+  <button class="btn btn-danger" (click)="modalService.close('user-modal')">Close</button>
+
+</app-modal>
