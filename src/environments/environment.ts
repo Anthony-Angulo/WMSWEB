@@ -11,6 +11,7 @@ export const environment = {
   apiCRM: 'http://localhost:8898/api',
   apiWMS: 'http://crm.ccfnweb.com.mx/apiwms/public/api',
   // apiSAP: 'http://192.168.0.10:8886/api'
+  api: 'http://localhost:8898/api',
 };
 
 /*

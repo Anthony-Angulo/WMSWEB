@@ -33,6 +33,9 @@
               "node_modules/jquery/dist/jquery.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
               "node_modules/datatables.net-select/js/dataTables.select.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "xlsx"
             ]
           },
           "configurations": {

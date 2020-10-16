@@ -9,7 +9,7 @@
   <div class="right">
     <select class="form-control" [(ngModel)]="warehouseSelected" (ngModelChange)="filterChange()">
       <option [ngValue]="warehouse" *ngFor="let warehouse of warehouseList">
-        {{ warehouse.WhsName }}
+        {{ warehouse.WhsCode }}-{{ warehouse.WhsName }}
       </option>
     </select>
   </div>

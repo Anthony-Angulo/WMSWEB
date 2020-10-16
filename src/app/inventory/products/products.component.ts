@@ -4,10 +4,11 @@ import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 interface Warehouse {
   WhsCode: string;
-  WhsName: number;
+  WhsName: string;
 }
 
 interface Property {
@@ -20,7 +21,7 @@ interface Property {
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
+export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(DataTableDirective) datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -32,7 +33,7 @@ export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
   propertyList: Property[] = [];
   propertySelected: Property;
 
-  constructor(private spinner: NgxSpinnerService, private http: HttpClient) { }
+  constructor(private toastr: ToastrService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.initGeneral();
@@ -40,7 +41,6 @@ export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   initGeneral() {
-    this.spinner.show(undefined, { fullScreen: true });
     Promise.all([
       this.http.get(`${environment.apiSAP}/warehouse`).toPromise(),
       this.http.get(`${environment.apiSAP}/products/properties`).toPromise(),
@@ -58,9 +58,8 @@ export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
 
       this.filterChange();
     }).catch(error => {
+      this.toastr.error(error);
       console.error(error);
-    }).finally(() => {
-      this.spinner.hide();
     });
   }
 
@@ -90,7 +89,6 @@ export class ProductsComponent implements OnInit, OnDestroy, AfterViewInit  {
       dom: 'lBtipr',
       order: [[0, 'asc']],
       deferRender: true,
-      // lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
     };
   }
 

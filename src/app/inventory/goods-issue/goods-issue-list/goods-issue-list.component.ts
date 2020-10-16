@@ -18,22 +18,17 @@ export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    let orderUrl;
+    this.InitTable();
+  }
 
-    if (user && user.warehouseCode) {
-      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
-    } else {
-      orderUrl = `${environment.apiSAP}/GoodsIssue/search`;
-    }
-
+  InitTable() {
     this.dtOptions = {
       processing: true,
       serverSide: true,
       searchDelay: 500,
       autoWidth: false,
       ajax: {
-        url: orderUrl,
+        url: `${environment.apiSAP}/GoodsIssue/Search`,
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
@@ -58,7 +53,7 @@ export class GoodsIssueListComponent implements OnInit, AfterViewInit, OnDestroy
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/Inventory/Issue/' + data.DocEntry]);
+          this.router.navigate(['/Inventory/GoodsIssue/' + data.DocEntry]);
         });
         return row;
       },

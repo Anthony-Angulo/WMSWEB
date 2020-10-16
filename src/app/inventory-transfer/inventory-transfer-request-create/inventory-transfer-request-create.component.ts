@@ -135,7 +135,6 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
     return this.http.get(`${environment.apiSAP}/products/ToTransfer/${ItemCode}/${this.fromWarehouse.WhsCode}`)
       .toPromise()
       .then((product: Product) => {
-        // console.log(data)
         product.UOMList = product.UOMList.filter(uom => uom.UomEntry != 7);
         if (product.PesProm != 0 && product.UOMList.length == 1 && product.UOMList[0].BaseUom == 6) {
           const uombox: UOMDetail = {
@@ -199,8 +198,8 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
       for (let i = 0; i != data.length; ++i) { arr[i] = String.fromCharCode(data[i]); }
       const bstr = arr.join('');
       const workbook = read(bstr, { type: 'binary' });
-      let first_sheet_name = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[first_sheet_name];
+      const firstSheet = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheet];
       this.processJSON(utils.sheet_to_json(worksheet, { raw: true }));
     };
     fileReader.readAsArrayBuffer(this.file);

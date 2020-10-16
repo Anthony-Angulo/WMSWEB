@@ -3,13 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
-// #TODO: Refactor Api
 @Component({
   selector: 'app-goods-issue-detail',
   templateUrl: './goods-issue-detail.component.html',
-  styleUrls: ['./goods-issue-detail.component.css']
+  styleUrls: ['./goods-issue-detail.component.scss']
 })
 export class GoodsIssueDetailComponent implements OnInit {
 
@@ -17,18 +16,17 @@ export class GoodsIssueDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private http: HttpClient,
-              private location: Location,
-              private spinner: NgxSpinnerService) { }
+              private toastr: ToastrService,
+              private location: Location) { }
 
   ngOnInit(): void {
-    this.spinner.show(undefined, { fullScreen: true });
     const id = this.route.snapshot.paramMap.get('id');
-    this.http.get(`${environment.apiSAP}/GoodsIssue/${id}`).toPromise().then((data: any) => {
+    this.http.get(`${environment.apiSAP}/GoodsIssue/${id}`).toPromise()
+    .then((data: any) => {
       this.goodsIssue = data;
     }).catch(error => {
+      this.toastr.error(error);
       console.error(error);
-    }).finally(() => {
-      this.spinner.hide();
     });
   }
 

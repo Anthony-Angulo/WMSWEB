@@ -18,22 +18,17 @@ export class GoodsReceiptListComponent implements OnInit, AfterViewInit, OnDestr
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    let orderUrl;
+    this.InitTable();
+  }
 
-    if (user && user.warehouseCode) {
-      orderUrl = `${environment.apiSAP}/GoodsReceipt/search`;
-    } else {
-      orderUrl = `${environment.apiSAP}/GoodsReceipt/search`;
-    }
-
+  InitTable() {
     this.dtOptions = {
       processing: true,
       serverSide: true,
       searchDelay: 500,
       autoWidth: false,
       ajax: {
-        url: orderUrl,
+        url: `${environment.apiSAP}/GoodsReceipt/Search`,
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
@@ -58,7 +53,7 @@ export class GoodsReceiptListComponent implements OnInit, AfterViewInit, OnDestr
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/Inventory/Receipt/' + data.DocEntry]);
+          this.router.navigate(['/Inventory/GoodsReceipt/' + data.DocEntry]);
         });
         return row;
       },
