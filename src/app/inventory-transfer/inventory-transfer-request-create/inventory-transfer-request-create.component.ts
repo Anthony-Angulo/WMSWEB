@@ -10,18 +10,18 @@ import { environment } from 'src/environments/environment';
 import { read, utils} from 'xlsx';
 
 interface WarehouseTSR {
-  WhsCode: string;
-  WhsCodeTSR: string;
+  WHSCODE: string;
+  WHSTSRCODE: string;
   WhsName: string;
 }
 
 interface Product {
   ItemName: string;
   ItemCode: string;
-  PesProm: number;
+  U_IL_PesProm: number;
   OnHand: number;
   Quantity: number;
-  UOMList: UOMDetail[];
+  uom: UOMDetail[];
   SelectedUOM: UOMDetail;
 }
 
@@ -72,7 +72,7 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
     .then((warehouseList: WarehouseTSR[]) => {
       this.toWarehouseList = warehouseList;
       this.toWarehouse = this.toWarehouseList[0];
-      this.fromWarehouseList = warehouseList.filter(wh => ['S01', 'S17', 'S35'].includes(wh.WhsCode));
+      this.fromWarehouseList = warehouseList.filter(wh => ['S01', 'S17', 'S35'].includes(wh.WHSCODE));
       this.fromWarehouse = this.fromWarehouseList[0];
       this.warehouseChange();
     }).catch(error => {
@@ -90,7 +90,7 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
       autoWidth: false,
       ajax: (dataTablesParameters: any, callback) => {
         if (this.fromWarehouse) {
-          this.http.post(`${environment.apiSAP}/products/search/ToTransferWithStock/${this.fromWarehouse.WhsCode}`, dataTablesParameters)
+          this.http.post(`${environment.apiSAP}/products/search/ToTransferWithStock/${this.fromWarehouse.WHSCODE}`, dataTablesParameters)
             .toPromise()
             .then(data => callback(data));
         }
@@ -132,27 +132,28 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
   }
 
   selectProduct(ItemCode, quantity?: number) {
-    return this.http.get(`${environment.apiSAP}/products/ToTransfer/${ItemCode}/${this.fromWarehouse.WhsCode}`)
+    return this.http.get(`${environment.apiSAP}/products/ToTransfer/${ItemCode}/${this.fromWarehouse.WHSCODE}`)
       .toPromise()
       .then((product: Product) => {
-        product.UOMList = product.UOMList.filter(uom => uom.UomEntry != 7);
-        if (product.PesProm != 0 && product.UOMList.length == 1 && product.UOMList[0].BaseUom == 6) {
+        product.uom = product.uom.filter(uom => uom.UomEntry != 196 && uom.UomEntry != 116);
+        if (product.U_IL_PesProm != 0 && product.uom.length == 1 && product.uom[0].BaseUom == 185) {
           const uombox: UOMDetail = {
             BaseCode: 'KG',
-            BaseQty: product.PesProm,
+            BaseQty: product.U_IL_PesProm,
             BaseUom: 6,
             UomCode: 'Caja',
             UomEntry: -2
           };
-          product.UOMList.push(uombox);
+          product.uom.push(uombox);
         }
-        product.SelectedUOM = product.UOMList[0];
-        if (!product.SelectedUOM.BaseCode) {
+        product.SelectedUOM = product.uom[0];
+        if (!product.SelectedUOM.BaseUom) {
           this.toastr.error('El Producto no tiene unidad de medida valida');
           return;
         }
         product.Quantity = quantity || 1;
         this.products.push(product);
+        console.log(this.products)
       }).catch(error => {
         console.error(error);
       });
@@ -160,6 +161,48 @@ export class InventoryTransferRequestCreateComponent implements OnInit, AfterVie
 
   createRequest() {
 
+    const productNoStock = this.products.filter(p => p.OnHand <= 0);
+
+    if(productNoStock.length > 0) {
+      this.toastr.error('No Existe Stock Para Los Productos ' + productNoStock.map(p => p.ItemCode));
+      return;
+    }
+
+    if(this.fromWarehouse.WHSCODE == this.toWarehouse.WHSCODE) {
+      this.toastr.error('El Almacen Origen No Puede Ser Igual Al Almacen Destino');
+      return;
+    }
+
+    this.spinner.show(undefined, { fullScreen: true });
+
+    const output = {
+      comments: this.comments,
+      towhs: this.toWarehouse,
+      fromwhs: this.fromWarehouse,
+      rows: this.products.map(p => {
+        return {
+          quantity: p.Quantity,
+          code: p.ItemCode,
+          uom: p.SelectedUOM.UomEntry,
+          uomBase: (p.SelectedUOM.UomEntry == p.SelectedUOM.BaseUom) ? 1 : 0,
+          equivalentePV: p.SelectedUOM.BaseQty
+        };
+      })
+    };
+
+    this.http.post(environment.apiSAP + '/InventoryTransferRequest', output).toPromise().then((value: any) => {
+      this.products = [];
+      this.comments = '';
+      this.toastr.success('Se Agrego Correctamente la Orden');
+    }).catch(error => {
+      if (error.status == 200) {
+        return true;
+      }
+      this.toastr.error(error.error);
+      console.error(error);
+    }).finally(() => {
+      this.spinner.hide();
+    });
   }
 
   warehouseChange() {

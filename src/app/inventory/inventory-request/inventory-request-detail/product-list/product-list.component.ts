@@ -26,11 +26,11 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public modalService: ModalService, ) { }
 
   ngOnInit(): void {
-    this.initProducts();
     this.updateSubscription = this.updateObservable.subscribe(products => {
       this.ProductsDisplay = products;
       this.Update();
     });
+    this.initProducts();
   }
 
   initProducts() {
@@ -40,28 +40,23 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         callback({data: this.ProductsDisplay});
       },
       columns: [
-        { title: 'Numero de Articulo', data: 'ItemCode' },
-        { title: 'Descripcion del Articulo', data: 'ItemName' },
-        { title: 'Cant. Teorica', data: 'InvQuantity' },
-        { title: 'Cant. Contada', data: 'Quantity' },
-        { title: 'Desviacion', data: 'Deviation' },
-        { title: 'UM1', data: 'UomCode1' },
-        { title: 'Cant. Teorica2', data: 'InvQuantity2' },
-        { title: 'Cant. Contada2', data: 'Quantity2' },
-        { title: 'Desviacion2', data: 'Deviation2' },
-        { title: 'UM2', data: 'Uom2Display' },
+        { title: 'Codigo', data: 'ItemCode' },
+        { title: 'Nombre', data: 'ItemName' },
+        { title: 'Teorica', data: 'InvQuantity' },
+        { title: 'Contada', data: 'Quantity' },
+        { title: 'Unidad de Medida', data: 'UomCode1' },
         { title: 'Precio', data: 'Price' },
         { title: 'Total', data: 'Total' },
         { title: 'Moneda', data: 'CurrencyDisplay' },
       ],
       createdRow: (row: Node, data: any | object, index: number) => {
-        $('td', row).addClass('pointer');
+        $('td', row).addClass('pointer'); 
       },
       rowCallback: (row: Node, data: any | object, index: number) => {
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          console.log(data);
+          console.log(data)
           this.updateSubject.next(data);
           this.modalService.open('products-detail-modal');
         });

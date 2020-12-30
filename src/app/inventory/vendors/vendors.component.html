@@ -1,0 +1,16 @@
+<div class="body"> 
+    <button class="btn btn-primary btn-right" routerLink="/Inventory/Vendors/Create">Crear</button>
+    <div class="table-responsive">
+        <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"> 
+          <tfoot>
+            <tr>
+              <th><input type="text" class="form-control" placeholder="Buscar Nombre de Producto" /></th>
+              <th><input type="text" class="form-control" placeholder="Buscar Proveedor" /></th>
+              <th><input type="text" class="form-control" placeholder="Buscar Unidad Medida" /></th>
+              <th><input type="text" class="form-control" placeholder="Buscar Longitud" /></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+</div>
+

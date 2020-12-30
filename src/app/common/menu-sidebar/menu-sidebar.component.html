@@ -22,18 +22,18 @@
       </li>
       <li>
         <a routerLink="/InventoryTransfer/Request">
-          <span>Lista Solicitud de Translado</span>
+          <span>Solicitudes De Transferencia</span>
         </a>
       </li>
       <li>
         <a routerLink="/InventoryTransfer">
-          <span>Lista Transferenias</span>
+          <span>Transferencias De Stock</span>
         </a>
       </li>
     </ul>
   </li>
 
-  <li>
+  <!-- <li>
     <a class="menu-toggle pointer" data-toggle="collapse" aria-expanded="false" data-target="#BuySubmenu">
       <span>Compras</span>
     </a>
@@ -49,9 +49,9 @@
         </a>
       </li>
     </ul>
-  </li>
+  </li> -->
 
-  <li>
+  <!-- <li>
     <a class="menu-toggle pointer" data-toggle="collapse" aria-expanded="false" data-target="#VentasSubmenu">
       <span>Ventas</span>
     </a>
@@ -67,10 +67,10 @@
         </a>
       </li>
     </ul>
-  </li>
+  </li> -->
 
   <li>
-    <a class="menu-toggle pointer" aria-expanded="false" data-toggle="collapse" data-target="#InventarioSubmenu">
+    <a class="menu-toggle pointer"  data-toggle="collapse" aria-expanded="false" data-target="#InventarioSubmenu">
       <span>Inventario</span>
     </a>
     <ul class="collapse" id="InventarioSubmenu">
@@ -85,11 +85,16 @@
         </a>
       </li>
       <li>
+        <a routerLink="/Inventory/InventoryRequest/Location">
+          <span>Reporte de Inventario Por Ubicacion</span>
+        </a>
+      </li>
+      <li>
         <a routerLink="/Inventory/Products">
           <span>Stock</span>
         </a>
       </li>
-      <li>
+      <!-- <li>
         <a routerLink="/Inventory/GoodsReceipt">
           <span>Lista de Entradas de Mercancia</span>
         </a>
@@ -98,10 +103,22 @@
         <a routerLink="/Inventory/GoodsIssue">
           <span>Lista de Salida de Mercancia</span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </li>
 
+  <li>
+    <a class="menu-toggle pointer"  data-toggle="collapse" aria-expanded="false" data-target="#ProductosSubMenu">
+      <span>Productos</span>
+    </a>
+    <ul class="collapse" id="ProductosSubMenu">
+      <li>
+        <a routerLink="/Inventory/Vendors">
+          <span>Codigos de Barra</span>
+        </a>
+      </li>
+    </ul>
+  </li>
 </ul>
 <!-- <p>
   <small>

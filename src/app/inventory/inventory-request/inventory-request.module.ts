@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { InventoryRequestCreateComponent } from './inventory-request-create/inventory-request-create.component';
 import { InventoryRequestDetailComponent } from './inventory-request-detail/inventory-request-detail.component';
 import { InventoryRequestListComponent } from './inventory-request-list/inventory-request-list.component';
+import { InventoryRequestLocationComponent } from './inventory-request-location/inventory-request-location.component';
 import { DataTablesModule } from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
 
@@ -18,8 +19,9 @@ import { ModalModule } from 'src/app/common/modal/modal.module';
 
 const routes: Routes = [
   { path: 'Create', component: InventoryRequestCreateComponent },
+  { path: 'Location', component: InventoryRequestLocationComponent },
   { path: ':id', component: InventoryRequestDetailComponent },
-  { path: '', component: InventoryRequestListComponent },
+  { path: '', component: InventoryRequestListComponent }
 ];
 
 @NgModule({
@@ -27,11 +29,12 @@ const routes: Routes = [
     InventoryRequestCreateComponent,
     InventoryRequestDetailComponent,
     InventoryRequestListComponent,
+    InventoryRequestLocationComponent,
     ProductListCreateComponent,
     UserListComponent,
     ProductListDetailComponent,
     ProductsBarcodeComponent,
-    ProductsDetailComponent,
+    ProductsDetailComponent
   ],
   imports: [
     CommonModule,

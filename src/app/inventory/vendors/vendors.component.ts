@@ -1,56 +1,54 @@
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { throwError, Subject } from 'rxjs';
+
 
 @Component({
-  selector: 'app-inventory-request-list',
-  templateUrl: './inventory-request-list.component.html',
-  styleUrls: ['./inventory-request-list.component.scss']
+  selector: 'app-vendors',
+  templateUrl: './vendors.component.html',
+  styleUrls: ['./vendors.component.scss']
 })
-export class InventoryRequestListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class VendorsComponent implements OnInit {
 
   @ViewChild(DataTableDirective) datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<InventoryRequestListComponent> = new Subject();
+  dtTrigger: Subject<VendorsComponent> = new Subject();
 
-  inventoryRequestList = [];
+  constructor(private http: HttpClient,
+    private spinner: NgxSpinnerService,
+    private location: Location,
+    private router: Router) { }
 
-  constructor(private http: HttpClient, private spinner: NgxSpinnerService, private router: Router) { }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.initTable();
   }
 
   initTable() {
     this.dtOptions = {
+      // destroy: true,
       ajax: (dataTablesParameters: any, callback) => {
-        this.http.get(`${environment.apiCCFN}/inventory`).toPromise().then((data: any[]) => {
+        this.http.get(`${environment.apiCCFN}/codeBar`).toPromise().then((data: any[]) => {
           this.afterView();
           callback({ data });
         });
       },
       columns: [{
-        title: 'Codigo De Inventario',
-        data: 'ID'
+        title: 'Producto',
+        data: 'ItemCode'
       }, {
-        title: 'Tipo',
-        data: 'Label'
+        title: 'Proveedor',
+        data: 'OriginLocation'
       }, {
-        title: 'Status',
-        data: 'Status'
+        title: 'Unidad de Medida',
+        data: 'UoM'
       }, {
-        title: 'Sucursal',
-        data: 'WhsName'
-      }, {
-        title: 'Encargado',
-        data: 'UserName',
-      }, {
-        title: 'Fecha de Creacion',
-        data: 'DateCreated'
+        title: 'Largo',
+        data: 'BarcodeLength'
       }],
       createdRow: (row: Node, data: any | object, index: number) => {
         $('td', row).addClass('pointer');
@@ -59,18 +57,19 @@ export class InventoryRequestListComponent implements OnInit, OnDestroy, AfterVi
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          this.router.navigate(['/Inventory/InventoryRequest', data.ID]);
+          console.log(data)
+          this.router.navigate(['/Inventory/Vendors', data.ID]);
         });
         return row;
       },
       dom: 'ltipr',
-      order: [[0, 'desc']],
+      order: [[1, 'asc']],
     };
   }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
-    this.afterView();
+    this.afterView(); 
   }
 
   afterView() {
@@ -89,6 +88,5 @@ export class InventoryRequestListComponent implements OnInit, OnDestroy, AfterVi
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-
 
 }

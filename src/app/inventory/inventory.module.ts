@@ -6,13 +6,19 @@ import { DataTablesModule } from 'angular-datatables';
 
 import { ProductsComponent } from './products/products.component';
 import { ModalModule } from '../common/modal/modal.module';
+import { VendorsComponent } from './vendors/vendors.component';
 
 
 const routes: Routes = [
   { path: 'Products', component: ProductsComponent },
+  // { path: 'Vendors', component: VendorsComponent},
   {
     path: 'InventoryRequest',
     loadChildren: () => import('./inventory-request/inventory-request.module').then(m => m.InventoryRequestModule)
+  },
+  {
+    path: 'Vendors',
+    loadChildren: () => import('./vendors/vendors.module').then(m => m.VendorsModule)
   },
   {
     path: 'GoodsReceipt',
@@ -28,6 +34,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ProductsComponent,
+    // VendorsComponent,
   ],
   imports: [
     CommonModule,

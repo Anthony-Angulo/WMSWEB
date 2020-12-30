@@ -28,11 +28,20 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtOptions = {
       autoWidth: false,
       ajax: (dataTablesParameters: any, callback) => {
-        this.http.get(`${environment.apiCRM}/users/18`)
+        this.http.get(`${environment.apiCCFN}/user`)
           .toPromise()
           .then(data => callback({data}));
       },
-      columns: [{ data: 'name' }, ],
+      columns: [{
+        title: "Nombre",
+        data: 'Name'
+      }, {
+        title: "Apellido",
+        data: 'LastName'
+      }, {
+        title: "Correo",
+        data: 'Email'
+      } ],
       language: {
         zeroRecords: 'No se Encontraron Usuarios',
         processing: 'Procesando...'
@@ -44,6 +53,7 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
+          console.log(data)
           this.userSelected.emit(data);
         });
         return row;

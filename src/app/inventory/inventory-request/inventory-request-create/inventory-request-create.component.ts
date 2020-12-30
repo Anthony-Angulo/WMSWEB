@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ModalService } from 'src/app/common/modal/modal.service';
 import { Location } from '@angular/common';
 import { throwError, Subject } from 'rxjs';
+import { env } from 'process';
 
 @Component({
   selector: 'app-inventory-request-create',
@@ -14,10 +15,10 @@ import { throwError, Subject } from 'rxjs';
 })
 export class InventoryRequestCreateComponent implements OnInit {
 
-  modeSelected = 0;
+  modeSelected = 2;
   optionsMode = [
-    { id: 0, display: 'Parcial' },
-    { id: 1, display: 'Completa' },
+    // { id: 0, display: 'Parcial' },
+    // { id: 1, display: 'Completa' },
   ];
 
   propertyList = [];
@@ -43,11 +44,13 @@ export class InventoryRequestCreateComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show(undefined, { fullScreen: true });
     Promise.all([
-      this.http.get(environment.apiSAP + '/warehouse/ToInventory').toPromise(),
+      this.http.get(`${environment.apiCCFN}/warehouse`).toPromise(),
+      this.http.get(`${environment.apiCCFN}/inventoryType`).toPromise(),
       this.http.get(environment.apiSAP + '/products/properties').toPromise()
-    ]).then(([warehouseList, propertyList]: any[]) => {
+    ]).then(([warehouseList, optionsMode ,propertyList]: any[]) => {
 
       this.warehouseList = warehouseList;
+      this.optionsMode = optionsMode;
       this.warehouseSelected = this.warehouseList[0];
       this.propertyList = propertyList.filter(property => property.ItmsTypCod <= 8);
       this.propertySelected = this.propertyList[0];
@@ -118,22 +121,30 @@ export class InventoryRequestCreateComponent implements OnInit {
     this.location.back();
   }
 
-  createReport() {
+  async createReport() {
+
 
     const output = {
-      employee: this.userSelected,
-      warehouse: this.warehouseSelected
-    };
+      type:  this.modeSelected,
+      status: '1',
+      warehouse: this.warehouseSelected.ID,
+      userid: this.userSelected.Id
+    }
 
     this.spinner.show(undefined, { fullScreen: true });
+
+    let result = await this.http.post(`${environment.apiCCFN}/inventory`, output).toPromise();
+    
     let postPromise;
-    if (this.modeSelected == 1) {
-      postPromise = this.addCompleteInventoryRequest(output);
+
+    if (this.modeSelected == 2) {
+      postPromise = this.addCompleteInventoryRequest(result);
     } else {
-      postPromise = this.addPartialInventoryRequest(output);
+      postPromise = this.addPartialInventoryRequest(result);
     }
 
     postPromise.then(val => {
+      console.log(val)
       this.router.navigate(['/Inventory']);
     }).catch(error => {
       console.error(error);
@@ -143,17 +154,42 @@ export class InventoryRequestCreateComponent implements OnInit {
 
   }
 
-  addPartialInventoryRequest(output) {
-    output.rows = this.productSelected;
-    return this.http.post(environment.apiWMS + '/InventoryRequestSAP/Partial', output).toPromise();
+  addPartialInventoryRequest(result) {
+
+    let output = this.productSelected.map(p => {
+      return [
+        p.ItemCode,
+        p.ItemName,
+        0,
+        p.OnHand,
+        p.ManBtchNum,
+        p.U_IL_TipPes,
+        p.Id,
+        result.id
+      ]
+    })
+
+    return this.http.post(`${environment.apiCCFN}/inventoryProduct`, output).toPromise();
   }
 
-  async addCompleteInventoryRequest(output) {
-    output.rows = [];
+  async addCompleteInventoryRequest(result) {
     const WhsCode = this.warehouseSelected.WhsCode;
-    const products = await this.http.get(`${environment.apiSAP}/products/InventoryCompleteProducts/${WhsCode}`).toPromise();
-    output.rows = products;
-    return this.http.post(environment.apiWMS + '/InventoryRequestSAP/Complete', output).toPromise();
+    result.rows = await this.http.get(`${environment.apiSAP}/products/InventoryCompleteProducts/${WhsCode}`).toPromise();
+    
+    let output = result.rows.map(p => {
+      return [
+        p.ItemCode,
+        p.ItemName,
+        0,
+        p.OnHand,
+        p.ManBtchNum,
+        p.U_IL_TipPes,
+        this.userSelected.Id,
+        result.id
+      ]
+    })
+
+    return this.http.post(`${environment.apiCCFN}/inventoryProduct`, output).toPromise();
   }
 
 }

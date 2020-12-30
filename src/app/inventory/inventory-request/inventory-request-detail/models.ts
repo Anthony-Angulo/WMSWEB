@@ -1,23 +1,19 @@
 export interface IBarCode {
   CodeBar: string;
-  InventorySAPDetail: string;
-  ItemCode: string;
-  ItemName: string;
-  Lote: string;
+  InventoryProductDetailID: string;
+  Batch: string;
   Quantity: string;
-  created_at: string;
-  id: string;
+  DateCreated: string;
+  ID: string;
 }
 
 export interface IDetail {
-  EmployeeName: string;
-  InventorySAPRow: string;
-  ItemCode: string;
-  ItemName: string;
+  UserId: string;
+  InventoryProductID: string;
   Quantity: number;
   Zone: string;
-  created_at: string;
-  id: string;
+  DateCreated: string;
+  ID: string;
   BarCodes: IBarCode[];
 }
 
@@ -29,23 +25,21 @@ export interface IRow {
   Uom2Display: string;
   Total: number;
   CurrencyDisplay: string;
-  StatusDisplay: string;
-  ClosedDate: string;
   EmployeeName: string;
-  EmployeeSAPID: string;
+  UserId: string;
   InvQuantity: number;
-  InventorySAPHeader: string;
+  InventoryID: string;
   ItemCode: string;
   ItemName: string;
-  ManejaLote: string;
+  NeedBatch: string;
   Quantity: number;
   Status: string;
-  TipoPeso: string;
+  WeightType: string;
   UOM: string;
   UomCode1: string;
   UomCode2: string;
   created_at: string;
-  id: string;
+  ID: string;
   Currency: string;
   IUoMEntry: number;
   NumInSale: number;
@@ -58,18 +52,16 @@ export interface IRow {
   SUoMEntry: number;
   U_IL_PesProm: number;
   WarehouseCode: string;
-  Detail: IDetail[];
 }
 
+
 export interface IDocument {
-  ClosedDate: string;
-  EmployeeName: string;
-  EmployeeSAPID: string;
-  InventoryStatus: string;
-  InventoryType: string;
-  WarehouseCode: string;
-  WarehouseName: string;
-  created_at: string;
-  id: string;
+  DateCreated: string;
+  Name: string;
+  Status: string;
+  StatusId: number;
+  Label: string;
+  WhsName: string;
+  ID: string;
   Rows: IRow[];
 }

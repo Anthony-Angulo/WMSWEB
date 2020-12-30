@@ -80,3 +80,13 @@ app-modal {
 select {
   width: fit-content !important;
 }
+
+.button {
+  transition-duration: 0.4s;
+  margin: 5px;
+}
+
+.button:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}

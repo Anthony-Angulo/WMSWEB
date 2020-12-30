@@ -45,49 +45,29 @@ export class InventoryRequestDetailComponent implements OnInit {
     this.spinner.show(undefined, { fullScreen: true });
     const id = this.route.snapshot.paramMap.get('id');
     Promise.all([
-      this.http.get(`${environment.apiWMS}/getInventoryRequestSAPDetail/${id}`).toPromise(),
+      this.http.get(`${environment.apiCCFN}/inventory/${id}`).toPromise(),
+      this.http.get(`${environment.apiCCFN}/inventoryProduct/${id}`).toPromise(),
       this.http.get(`${environment.apiSAP}/products/Uoms/`).toPromise(),
-    ]).then(([data, uoms]: any[]) => {
-
+    ]).then(([inventory, data, uoms]: any[]) => {
       this.UOMList = uoms;
 
-      const BarcodesList: IBarCode[] = data.codes;
-      const DetailList: IDetail[] = data.details;
-      const Rows: IRow[] = data.rows;
-      const Header: IDocument = data.order;
+      const Rows: IRow[] = data;
+      const Header: IDocument = inventory;   
 
-      if (BarcodesList.length != 0) {
-        DetailList.forEach(Detail => {
-          Detail.BarCodes = BarcodesList.filter(BarCode => BarCode.InventorySAPDetail == Detail.id);
-        });
-      }
 
-      if (DetailList.length != 0) {
-        Rows.forEach(Row => {
-          Row.Detail = DetailList.filter(Detail => Detail.InventorySAPRow == Row.id);
-          Row.Detail.forEach(Detail => Detail.Quantity = Number(Detail.Quantity));
-          if (Row.Quantity == null) {
-            Row.Quantity = Row.Detail
-              .map(detail => Number(detail.Quantity))
-              .reduce((a, b) => (a + b), 0).toFixedNumber();
-          } else {
-            Row.Quantity = Number(Row.Quantity).toFixedNumber();
-          }
-        });
-      }
 
       const output = Rows.map(row => row.ItemCode);
 
       Header.Rows = Rows;
       this.Document = Header;
-      this.UserCanClose = Rows.length != 0 && Header.InventoryStatus == '1';
+      // this.UserCanClose = Rows.length != 0 && Header.InventoryStatus == '1';
 
       return this.http.post(`${environment.apiSAP}/products/UomDetailWithLastSellPrice`, output).toPromise();
 
     }).then((items: any[]) => {
 
       this.Document.Rows.forEach(Row => {
-        Row.WarehouseCode = this.Document.WarehouseCode;
+        Row.WarehouseCode = this.Document.WhsName;
         const item = items.find(item => item.ItemCode == Row.ItemCode);
         Row = Object.assign(Row, item);
         const Uom1 = this.UOMList.find(uom => uom.UomEntry == Row.IUoMEntry);
@@ -107,10 +87,11 @@ export class InventoryRequestDetailComponent implements OnInit {
         Row.Deviation = (Row.Quantity - Row.InvQuantity).toFixedNumber();
 
 
-        if (Row.IUoMEntry == 185 && Row.ManejaLote == 'Y' && Row.TipoPeso == 'V') {
+        if (Row.IUoMEntry == 185 && Row.NeedBatch == 'Y' && Row.WeightType == 'V') {
           // Carnes
           Row.InvQuantity2 = (Row.InvQuantity / (Row.U_IL_PesProm || 1)).toFixedNumber();
-          Row.Quantity2 = Row.Detail.map(Detail => Detail.BarCodes.length).reduce((a, b) => a + b, 0).toFixedNumber();
+          // Row.Quantity2 = Row.Detail.map(Detail => Detail.BarCodes.length).reduce((a, b) => a + b, 0).toFixedNumber();
+          Row.Quantity2 = (Row.Quantity / Row.U_IL_PesProm).toFixedNumber();
           Row.Deviation2 = (Row.Quantity2 - (Row.InvQuantity / (Row.U_IL_PesProm || 1))).toFixedNumber();
           Row.Uom2Display = 'Caja';
         } else {
@@ -123,8 +104,8 @@ export class InventoryRequestDetailComponent implements OnInit {
 
         Row.Price = Row.Price || 0;
         Row.Total = (Row.Price * Row.Quantity).toFixedNumber();
-        Row.CurrencyDisplay = Row.Currency || 'Precio Invalido',
-        Row.StatusDisplay = (Row.Status == '0') ? 'Abierto' : 'Cerrado';
+        Row.CurrencyDisplay = Row.Currency || 'Precio Invalido';
+        // Row.Status = (Row.Status == '0') ? 'Abierto' : 'Cerrado';
 
       });
 
@@ -136,6 +117,34 @@ export class InventoryRequestDetailComponent implements OnInit {
     }).finally(() => {
       console.log(this.Document);
       this.spinner.hide();
+    });
+  }
+
+  begin() {
+    let data = {
+      id: this.Document.ID,
+      statusId: 2
+    }
+    this.http.put(`${environment.apiCCFN}/inventory/`, data).toPromise().then((resp) => {
+      if(resp) {
+        this.Document.StatusId = 2;
+      }
+    }).catch(err => {
+      console.log(err)
+    });
+  }
+
+  close() {
+    let data = {
+      id: this.Document.ID,
+      statusId: 3
+    }
+    this.http.put(`${environment.apiCCFN}/inventory/`, data).toPromise().then((resp) => {
+      if(resp) {
+        this.Document.StatusId = 2;
+      }
+    }).catch(err => {
+      console.log(err)
     });
   }
 
@@ -159,23 +168,23 @@ export class InventoryRequestDetailComponent implements OnInit {
   }
 
   generateTxt() {
-    const lines = [];
-    this.Document.Rows.forEach(Row => {
-      Row.Detail.forEach(Detail => {
-        if (Detail.Quantity) {
-          const line = [Detail.ItemCode.substring(1), Detail.Quantity];
+    // const lines = [];
+    // this.Document.Rows.forEach(Row => {
+    //   Row.Detail.forEach(Detail => {
+    //     if (Detail.Quantity) {
+    //       const line = [Detail.ItemCode.substring(1), Detail.Quantity];
 
-          if (Row.IUoMEntry == 185 && Row.ManejaLote == 'Y' && Row.TipoPeso == 'V') {
-            line.push(Detail.Quantity);
-          } else {
-            line.push((Detail.Quantity / Row.NumInSale).toFixed(2));
-          }
-          line.push(Detail.EmployeeName.replace(/ /g, '').substr(0, 15));
-          lines.push(line.join('|'));
-        }
-      });
-    });
-    this.download('inven.txt', lines.join('\n'));
+    //       if (Row.IUoMEntry == 185 && Row.NeedBatch == 'Y' && Row.WeightType == 'V') {
+    //         line.push(Detail.Quantity);
+    //       } else {
+    //         line.push((Detail.Quantity / Row.NumInSale).toFixed(2));
+    //       }
+    //       line.push(Detail.EmployeeName.replace(/ /g, '').substr(0, 15));
+    //       lines.push(line.join('|'));
+    //     }
+    //   });
+    // });
+    // this.download('inven.txt', lines.join('\n'));
   }
 
   generateExcel() {
@@ -196,7 +205,7 @@ export class InventoryRequestDetailComponent implements OnInit {
         Precio: Row.Price,
         Total: Row.Total,
         Moneda: Row.Currency,
-        Cerrado: Row.StatusDisplay,
+        Cerrado: Row.Status,
       };
     });
     rows.unshift({

@@ -13,8 +13,8 @@ import { UserService } from '../services/user.service';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup = this.formBuilder.group({
-    Email: ['', [Validators.required, Validators.email]],
-    Password: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
   });
 
   submitted = false;

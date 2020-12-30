@@ -1,1 +1,27 @@
-<p>products-barcode works!</p>
+<app-modal id="products-barcode-modal">
+
+    <h1>Lotes De Producto</h1>
+<!--   
+    <p>Producto: {{ Product?.ItemName }}</p>
+    <p>Descripcion: {{ Product?.ItemCode }}</p> -->
+  
+    <!-- <p>Descripcion: {{ Product?.Detail | json }}</p> -->
+  
+  
+    <div class="table-responsive">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+        <tfoot>
+          <tr>
+            <th><input type="text" class="form-control" placeholder="Buscar Codigo De Barra" /></th>
+            <th><input type="text" class="form-control" placeholder="Buscar Lote" /></th>
+            <th><input type="text" class="form-control" placeholder="Buscar Cantidad" /></th>
+            <th><input type="text" class="form-control" placeholder="Buscar Fecha" /></th>
+          </tr>
+          <tfoot>
+      </table>
+    </div>
+  
+    <!-- <button class="btn btn-danger" (click)="modalService.close('products-modal')">Close</button> -->
+    <!-- <button class="btn btn-success" (click)="SelectProducts()">Seleccionar</button> -->
+  
+  </app-modal>

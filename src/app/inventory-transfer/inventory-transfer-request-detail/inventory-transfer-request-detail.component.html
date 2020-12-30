@@ -78,19 +78,19 @@
         <div class="card-body">
           <div class="row" *ngIf="InventoryTransferRequest.TransferList">
             <div class="col-6">
-              Transferencia
+              Transferencias De Stock
             </div>
             <div class="col-6">
-              Solicitud
+              Solicitud De Transferencias Creadas
             </div>
           </div>
           <div class="row" *ngFor="let transfer of InventoryTransferRequest.TransferList" >
             <div class="col-6">
               <div class="card">
                 <div class="card-body" routerLink="/InventoryTransfer/{{transfer.DocEntry}}">
-                  <h5 class="card-title">{{ transfer.DocNum }}</h5>
+                  <h5 class="card-title">Transferencia: {{ transfer.DocNum }}</h5>
                   <p class="card-text">
-                    {{ transfer.DocDate }}
+                    Fecha De Creacion: {{ transfer.DocDate }}
                     <!-- <button type="button" class="btn btn-light" (click)="print(transfer);$event.stopPropagation();">Impresion</button> -->
                   </p>
                 </div>
