@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiSAP: 'http://192.168.0.10:8889/api',
+  apiSAP: 'http://192.168.101.105:5002/api',
   apiCRM: 'http://crm.ccfnweb.com.mx/apicrm/public/api',
   apiWMS: 'http://crm.ccfnweb.com.mx/apiwms/public/api',
   // apiSAP: 'http://192.168.0.10:8886/api'
