@@ -8,8 +8,8 @@ export const environment = {
   apiCRM: 'http://crm.ccfnweb.com.mx/apicrm/public/api',
   apiWMS: 'http://crm.ccfnweb.com.mx/apiwms/public/api',
   // apiSAP: 'http://192.168.0.10:8886/api'
-  // apiCCFN: 'http://apiccfntest.ccfnweb.com.mx/api',
-  apiCCFN: 'http://localhost:5004/api',
+   apiCCFN: 'http://apiccfntest.ccfnweb.com.mx/api',
+  //apiCCFN: 'http://localhost:5004/api',
 };
 
 /*
