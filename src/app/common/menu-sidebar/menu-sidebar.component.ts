@@ -9,7 +9,7 @@ import { UserService } from '../../account/services/user.service';
 })
 export class MenuSidebarComponent implements OnInit {
 
-  currentUser: User;
+  user: any;
 
   constructor(private userService: UserService) {
     // this.userService.currentUser.subscribe(x => {
@@ -18,7 +18,7 @@ export class MenuSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log('MenuSideBarComponent');
+    this.user = JSON.parse(localStorage.getItem('AppInfo'));
   }
 
 }

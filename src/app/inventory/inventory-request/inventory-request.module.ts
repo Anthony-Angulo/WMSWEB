@@ -15,11 +15,13 @@ import { ProductListComponent as ProductListDetailComponent} from './inventory-r
 import { ProductsBarcodeComponent } from './inventory-request-detail/product-list/products-barcode/products-barcode.component';
 import { ProductsDetailComponent } from './inventory-request-detail/product-list/products-detail/products-detail.component';
 import { ModalModule } from 'src/app/common/modal/modal.module';
+import { InventoryRequestMenudeoComponent } from './inventory-request-menudeo/inventory-request-menudeo.component';
 
 
 const routes: Routes = [
   { path: 'Create', component: InventoryRequestCreateComponent },
   { path: 'Location', component: InventoryRequestLocationComponent },
+  { path: 'Menudeo', component: InventoryRequestMenudeoComponent },
   { path: ':id', component: InventoryRequestDetailComponent },
   { path: '', component: InventoryRequestListComponent }
 ];
@@ -34,7 +36,8 @@ const routes: Routes = [
     UserListComponent,
     ProductListDetailComponent,
     ProductsBarcodeComponent,
-    ProductsDetailComponent
+    ProductsDetailComponent,
+    InventoryRequestMenudeoComponent
   ],
   imports: [
     CommonModule,

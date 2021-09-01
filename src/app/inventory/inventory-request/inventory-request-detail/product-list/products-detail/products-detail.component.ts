@@ -27,6 +27,8 @@ export class ProductsDetailComponent implements OnInit, AfterViewInit, OnDestroy
   ProductRow: IRow;
   ProductDetail: IDetail;
 
+  prodRot: any;
+
   constructor(public modalService: ModalService, private http: HttpClient, private spinner: NgxSpinnerService ) { }
 
   async ngOnInit() {
@@ -35,6 +37,7 @@ export class ProductsDetailComponent implements OnInit, AfterViewInit, OnDestroy
       this.ProductRow = Product;
       this.http.get(`${environment.apiCCFN}/inventoryDetail/${Product.ID}`).toPromise().then((resp: IDetail) => {
         this.ProductDetail = resp;
+        this.prodRot = resp;
         this.Update();
       }).catch((err:any) => {
         if(err.status == 404) {
@@ -56,49 +59,62 @@ export class ProductsDetailComponent implements OnInit, AfterViewInit, OnDestroy
         callback({data: (this.ProductDetail || [])});
       },
       columns: [
-        { cellType: 'input',
-          createdCell: (cell: Node, cellData: any, rowData: any, row: number, col: number) => {
-          $(cell).val(rowData.Quantity);
-          $(cell).attr('id','quantity-input[' + contInput + ']');
-          contInput = contInput + 1
-        }, title: 'Cantidad Unidad Base', data: 'Quantity'},
+        { title: 'Cantidad Unidad Base', data: 'Quantity'},
         { title: 'Encargado', data: 'UserName' },
         { title: 'Zona', data: 'Zone' },
         { title: 'Fecha', data: 'DateCreated' },
         { cellType: 'button',
           createdCell: (cell: Node, cellData: any, rowData: any, row: number, col: number) => {
             $(cell).text("Modificar");
-            $(cell).addClass('button');
-            $(cell).attr('id',conBut);
-            conBut = conBut + 1
+            $(cell).addClass('btn btn-warning');
+
             $(cell).on('click', () => {
 
-              var inputValue = (<HTMLInputElement>document.getElementById('quantity-input['+$(cell).attr('id')+']')).value
+              console.log(rowData)
+
+              
 
               if(inputValue == rowData.Quantity) {
-                console.log("No hay cambios en la cantidad")
+                window.alert("No hay cambios en la cantidad");
                 return
               }
 
               if(this.ProductRow.NeedBatch == 'Y') {
-                console.log("Debes eliminar el lote para productos con lotes");
+                window.alert("Debes eliminar el lote para productos con lotes")
                 return
               }
 
-              this.spinner.show(undefined, { fullScreen: true });
+              var inputValue = window.prompt("Ingresa cantidad modificada");
+
 
               let updateDetail = {
                 id: rowData.ID,
                 quantity: inputValue
               }
 
-              let dif = this.ProductRow.Quantity - Number(inputValue)
+              let dif
+              let tot
+
+              if(inputValue == null) return
+
+
+              if( rowData.Quantity > Number(inputValue)) {
+                 dif = rowData.Quantity - Number(inputValue)
+                 tot = this.ProductRow.Quantity - dif
+              } else {
+                 dif =  Number(inputValue) - rowData.Quantity
+                 tot = this.ProductRow.Quantity + dif
+              }
+
+              
 
               let updateProduct = {
                 id: rowData.InventoryProductID,
                 itemcode: this.ProductRow.ItemCode,
-                quantity: dif
+                quantity: tot
               }
+
+              this.spinner.show(undefined, { fullScreen: true });
 
               Promise.all([
                 this.http.put(`${environment.apiCCFN}/inventoryDetail`, updateDetail).toPromise(),
@@ -109,6 +125,7 @@ export class ProductsDetailComponent implements OnInit, AfterViewInit, OnDestroy
               }).catch(async err => {
                 console.log(err)
               }).finally(() => {
+                window.location.reload()
                 this.spinner.hide();
               });
             }) 
@@ -122,7 +139,7 @@ export class ProductsDetailComponent implements OnInit, AfterViewInit, OnDestroy
         const self = this;
         $('td', row).off('click');
         $('td', row).on('click', () => {
-          console.log(data)
+          data.invProd = this.ProductRow
           this.updateSubject.next(data);
           this.modalService.close('products-detail-modal');
           this.modalService.open('products-barcode-modal');

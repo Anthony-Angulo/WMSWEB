@@ -1,1 +1,89 @@
-<p>vendors-edit works!</p>
+
+<div class="header">
+    <button  class="btn btn-primary btn-right" (click)="backClicked()"> 
+      Regresar
+    </button>
+    <h2>Vendors - Editar</h2>
+  </div>
+
+  <div class="body" >
+    <div class="row">
+      <div class="col-6">
+        <label>Codigo de Producto</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="ItemCode"
+          placeholder="Ingresa Codigo de Producto"
+        />
+      </div>
+      <div class="col-6">
+        <label>Proveedor</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="Provider"
+          placeholder="Ingresa Un Proveedor"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label>Unidad de Medida</label>
+        <select
+          class="custom-select"
+          [(ngModel)]="UoMSelected"
+        >
+          <option [ngValue]="UoM" *ngFor="let UoM of WeigthType">
+            {{ UoM.label }}
+          </option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label>Largo de Codigo</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="Length"
+          placeholder="Ingresa Un Largo"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label>Largo de Peso</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="PesoLength"
+          placeholder="Ingresa largo de peso"
+        />
+      </div>
+      <div class="col-6">
+        <label>Posicion de Peso</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="PesoPos"
+          placeholder="Ingresa posicion de peso"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label>Tiene decimal</label>
+        <select class="custom-select" [(ngModel)]="HasDecimal">
+          <option [ngValue]="d" *ngFor="let d of contieneDecimal">
+            {{ d.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <button class="btn btn-primary" (click)="updateVendor()">
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>

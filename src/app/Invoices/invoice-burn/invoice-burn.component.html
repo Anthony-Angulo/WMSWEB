@@ -1,109 +1,95 @@
-<form>
-  <div class="form-group row">
-    <div class="col-6">
-      <div class="form-group row">
-        <div class="form-group col-4">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="Scanner" id=""
-              [(ngModel)]="checkScanner" checked>
-            Uso Scanner </label>
-        </div>
-        <div class="form-group col-8">
-          <label for="date" class="sr-only">Dia:</label>
-          <input name="date" [(ngModel)]="today" type="date" required>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="Gafete" class="col-sm-2 col-form-label col-form-label-lg">Gafete</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" (keyup)="VerifyGafete($event.target.value)"  #Gafete placeholder="Gafete">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-lg" for="Invoice">Scanear
-          y/o Num.Doc:</label>
-        <div class="col-sm-10">
-          <input  type="text" maxlength="10" name="InvNumber" #InvoiceInput class="form-control" id="Invoice"
-            placeholder="Numero de factura" [disabled]="!IfGafete" [(ngModel)]="InvoiceInfo.DocNum">
-            
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <input name="" id="" class="btn btn-secondary btn-block" (click)="Search()" type="button" value="Buscar"></div>
-        <div class="col">
-          <input name="" id="" class="btn btn-danger btn-block" (click)="CancelClick()" type="button" value="Cancelar"></div>
-        <div class="col">
-          <input name="" id="" class="btn btn-primary btn-block"  type="button" value="Quemar"></div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="border border-primary" style="height:
-        100%;text-align:center;">
-        <p>NO SE TIENE REGISTRO DE FACTURAS</p>
-      </div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-6">
-      <div class="form-group row">
-        <label for="Email" class="col-sm-2 col-form-label col-form-label-lg">Num.Factura</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="InvNumberEn" name="InvNumberEn"
-            placeholder="Num.Factura"  [(ngModel)]="InvoiceInfo.DocNum">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="Email" class="col-sm-2 col-form-label col-form-label-lg">Cod.
-          Cliente</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Email"
-            placeholder="Cod. Cliente" [(ngModel)]="InvoiceInfo.CardCode" name="CodClient">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-lg" for="Invoice">Nom.
-          Cliente</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Invoice"
-            placeholder="Nom. Cliente" [(ngModel)]="InvoiceInfo.CardName" name="CardName">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-lg" for="Invoice">Nom.
-          Fantasia</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Invoice"
-            placeholder="Nom. Fantasia" [(ngModel)]="InvoiceInfo.CardFName" name="CardFName">
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-group row">
-        <label for="Email" class="col-sm-2 col-form-label col-form-label-lg">Nombre
-          Usuario:</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Email"
-            placeholder="Nombre Usuario">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="Email" class="col-sm-2 col-form-label col-form-label-lg">Hora
-          de Quemado:</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Email"
-            placeholder="Hora quemado">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-lg" for="Invoice">Fecha
-          de Quemado:</label>
-        <div class="col-sm-10">
-          <input type="text" disabled class="form-control" id="Invoice"
-            placeholder="Fecha quemado">
-        </div>
-      </div>
+<div class="header">
+  <h2>Facturas - Quemado</h2>
+</div>
 
+
+<div class="body">
+  <div class="row">
+    <div class="col-2">
+      <label>Uso Escánner</label>
+      <input  type="checkbox" value="" id="flexCheckDefault"  checked [(ngModel)]="scanner">
+    </div>
+    <div class="col-6">
+      <label>Factura</label>
+      <input
+          id="input-codigo"
+          type="text"
+          class="form-control"
+          [(ngModel)]="factura"
+          placeholder="Ingresa Una Factura"
+          autocomplete="nope"
+        />
+    </div>
+    <div class="col-auto">
+      <label>--</label>
+      <button class="btn btn-primary" (click)="searchInCCFN()"> Buscar </button>
+    </div>
+    <div class="col-auto">
+      <label>--</label>
+      <button class="btn btn-danger" (click)="CancelClick()"> Cancelar </button>
+    </div>
+    <div class="col-auto">
+      <label>--</label>
+      <button class="btn btn-success" (click)="burnInvoice()"> Quemar </button>
     </div>
   </div>
-</form>
+
+  <div class="row">
+    <div class="col-4">
+      <label>Número de Factura</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.DocNum}}"
+          disabled
+        />
+    </div>
+    <div class="col-4">
+      <label>Nombre de Cliente</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.CardName}}"
+          disabled
+        />
+    </div>
+    <div class="col-4">
+      <label>Nombre Fantasía</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.CardFName}}"
+          disabled
+        />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <label>Tipo de Moneda</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.DocCur}}"
+          disabled
+        />
+    </div>
+    <div class="col-4">
+      <label>Fecha de Documento</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.DocDate}}"
+          disabled
+        />
+    </div>
+    <div class="col-4">
+      <label>Código de Barra</label>
+      <input
+          type="text"
+          class="form-control"
+          value="{{InvoiceInfo.CodBar}}"
+          disabled
+        />
+    </div>
+  </div>
+</div>

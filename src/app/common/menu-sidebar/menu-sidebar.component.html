@@ -2,7 +2,19 @@
 
 <!--TODO: STYLE-->
 
-<!-- <h4 style="padding-left: 20px;padding-top: 10px; padding-bottom: 10px;border-bottom: 2px solid #000;">{{ currentUser.warehouseName }}</h4> -->
+<div class="user-info">
+  <div class="image">
+    <div id="circle">{{ user.id }}</div>
+  </div>
+  <div class="info-container">
+    <div class="name">
+      {{ user.User }}
+    </div>
+    <div class="email">
+      {{user.Email}}
+    </div>
+  </div>
+</div>
 
 <ul style="height: calc(70vh - 100px);z-index: 1000000;">
 
@@ -90,20 +102,15 @@
         </a>
       </li>
       <li>
+        <a routerLink="/Inventory/InventoryRequest/Menudeo">
+          <span>Reporte de Inventario De Menudeo</span>
+        </a>
+      </li>
+      <li>
         <a routerLink="/Inventory/Products">
           <span>Stock</span>
         </a>
       </li>
-      <!-- <li>
-        <a routerLink="/Inventory/GoodsReceipt">
-          <span>Lista de Entradas de Mercancia</span>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/Inventory/GoodsIssue">
-          <span>Lista de Salida de Mercancia</span>
-        </a>
-      </li> -->
     </ul>
   </li>
 
@@ -132,11 +139,9 @@
     </ul>
   </li>
 </ul>
-<!-- <p>
+<p style="text-align: center;">
   <small>
-    Soporte<br>
-    soporte.sistemas@superchivas.com.mx<br>
-    +52 686 2626109<br>
-    www.helpdesk.ccfn.com
+    Numero Soporte: <h6>686 554 1535 ext 128</h6>
+    Portal OS Tickets: <h6><a href="http://192.168.0.10/osTickets/" style="margin: auto; text-align: center; display: block;">Sistema De Tickets</a></h6>
   </small>
-</p> -->
+</p>

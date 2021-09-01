@@ -4,9 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { utils, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-vendors-create',
@@ -21,8 +19,8 @@ export class VendorsCreateComponent implements OnInit {
   ];
 
   contieneDecimal = [
-    { id: 0, label: 'Si' },
-    { id: 1, label: 'No' }
+    { id: 1, label: 'Si' },
+    { id: 0, label: 'No' }
   ]
 
   ItemCode: any;
@@ -61,7 +59,8 @@ export class VendorsCreateComponent implements OnInit {
     this.spinner.show(undefined, { fullScreen: true });
     
     this.http.post(`${environment.apiCCFN}/codeBar`, newVendor).toPromise().then((resp) => {
-      console.log(resp)
+      this.toastr.success("Codigo de barra creado correctamente");
+      this.location.back();
     }).catch(err => { 
       console.log(err)  
     }).finally(() => { this.spinner.hide() });

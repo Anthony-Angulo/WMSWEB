@@ -19,7 +19,10 @@ export class InventoryTransferRequestListComponent implements OnInit, AfterViewI
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    const token = localStorage.getItem('token');
     let orderUrl;
+
 
     if (user && user.warehouseCode) {
       orderUrl = `${environment.apiSAP}/InventoryTransferRequest/search`;
@@ -35,6 +38,7 @@ export class InventoryTransferRequestListComponent implements OnInit, AfterViewI
       ajax: {
         url: orderUrl,
         type: 'POST',
+        headers: {'Authorization': `Bearer ${token}`},
         contentType: 'application/json',
         dataType: 'json',
         data(d) {

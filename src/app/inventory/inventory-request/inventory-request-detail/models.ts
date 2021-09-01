@@ -33,6 +33,7 @@ export interface IRow {
   ItemName: string;
   NeedBatch: string;
   Quantity: number;
+  updatedQty: number;
   Status: string;
   WeightType: string;
   UOM: string;
@@ -52,6 +53,8 @@ export interface IRow {
   SUoMEntry: number;
   U_IL_PesProm: number;
   WarehouseCode: string;
+  Detail: IDetail[];
+  cajas: number;
 }
 
 
@@ -62,6 +65,7 @@ export interface IDocument {
   StatusId: number;
   Label: string;
   WhsName: string;
+  WhsCode: string;
   ID: string;
   Rows: IRow[];
 }

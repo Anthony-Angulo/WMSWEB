@@ -31,9 +31,12 @@
       <button (click)="generateExcel()" class="btn btn-success export-button">
         Generar Excel
       </button>
-      <button (click)="generateTxt()" class="btn btn-primary export-button">
-        Generar Txt
+      <button (click)="generateExcelParaDummies()" class="btn btn-success export-button">
+        Generar Excel Menudeo
       </button>
+      <!-- <button (click)="generateTxt()" class="btn btn-primary export-button">
+        Generar Txt
+      </button> -->
     </div>
 
     <div class="col-6">
@@ -66,14 +69,14 @@
       >
         Empezar Inventario
       </button>
-      <!-- <button
+      <button
         *ngIf="Document.StatusId == 2"
         type="button"
         (click)="updateStock()"
         class="btn btn-warning option-button"
       >
         Actualizar Stock
-      </button> -->
+      </button>
     </div>
 
     <!-- <div class="table-responsive">

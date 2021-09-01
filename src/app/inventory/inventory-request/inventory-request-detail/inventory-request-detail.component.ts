@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
@@ -21,14 +21,15 @@ export class InventoryRequestDetailComponent implements OnInit {
   Document: IDocument;
   UOMList = [];
   ProductsDisplay: IRow[] = [];
+  output: any;
 
   PropertyList = [
-    {id: -1, label: 'Todos' },
-    {id: 5, label: 'ABARROTES' },
-    {id: 6, label: 'LACTEOS' },
-    {id: 7, label: 'CARNES' },
-    {id: 8, label: 'FRUTAS Y VERDURAS' },
-    {id: 39, label: 'CONSUMO INTERNO' },
+    { id: -1, label: 'Todos' },
+    { id: 5, label: 'ABARROTES' },
+    { id: 6, label: 'LACTEOS' },
+    { id: 7, label: 'CARNES' },
+    { id: 8, label: 'FRUTAS Y VERDURAS' },
+    { id: 39, label: 'CONSUMO INTERNO' },
   ];
 
   PropertySelected = this.PropertyList[0];
@@ -36,10 +37,10 @@ export class InventoryRequestDetailComponent implements OnInit {
   updateSubject: Subject<IRow[]> = new Subject<IRow[]>();
 
   constructor(private route: ActivatedRoute,
-              private http: HttpClient,
-              private toastr: ToastrService,
-              private spinner: NgxSpinnerService,
-              private location: Location) { }
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService,
+    private location: Location) { }
 
   ngOnInit(): void {
     this.spinner.show(undefined, { fullScreen: true });
@@ -52,18 +53,38 @@ export class InventoryRequestDetailComponent implements OnInit {
       this.UOMList = uoms;
 
       const Rows: IRow[] = data;
-      const Header: IDocument = inventory;   
+      const Header: IDocument = inventory;
 
+      const ids = Rows.map(row => row.ID);
 
-
-      const output = Rows.map(row => row.ItemCode);
+      this.output = Rows.map(row => row.ItemCode);
 
       Header.Rows = Rows;
       this.Document = Header;
-      // this.UserCanClose = Rows.length != 0 && Header.InventoryStatus == '1';
 
-      return this.http.post(`${environment.apiSAP}/products/UomDetailWithLastSellPrice`, output).toPromise();
+      return this.http.post(`${environment.apiCCFN}/inventoryDetail/all`, ids).toPromise()
 
+    }).then((detail: any) => {
+
+      const list = []
+
+      detail.forEach(e => {
+        e.forEach(y => {
+          let d = {
+            cajas: y.cajas,
+            ItemCode: y.ItemCode
+          }
+          list.push(d)
+        })
+      })
+
+      this.Document.Rows.forEach(Row => {
+        const cajas = list.find(i => i.ItemCode == Row.ItemCode);
+        Row = Object.assign(Row, cajas);
+      });
+
+
+      return this.http.post(`${environment.apiSAP}/products/UomDetailWithLastSellPrice`, this.output).toPromise();
     }).then((items: any[]) => {
 
       this.Document.Rows.forEach(Row => {
@@ -90,8 +111,8 @@ export class InventoryRequestDetailComponent implements OnInit {
         if (Row.IUoMEntry == 185 && Row.NeedBatch == 'Y' && Row.WeightType == 'V') {
           // Carnes
           Row.InvQuantity2 = (Row.InvQuantity / (Row.U_IL_PesProm || 1)).toFixedNumber();
-          // Row.Quantity2 = Row.Detail.map(Detail => Detail.BarCodes.length).reduce((a, b) => a + b, 0).toFixedNumber();
-          Row.Quantity2 = (Row.Quantity / Row.U_IL_PesProm).toFixedNumber();
+          Row.Quantity2 = Row.cajas
+          // Row.Quantity2 = (Row.Quantity / Row.U_IL_PesProm).toFixedNumber();
           Row.Deviation2 = (Row.Quantity2 - (Row.InvQuantity / (Row.U_IL_PesProm || 1))).toFixedNumber();
           Row.Uom2Display = 'Caja';
         } else {
@@ -126,7 +147,7 @@ export class InventoryRequestDetailComponent implements OnInit {
       statusId: 2
     }
     this.http.put(`${environment.apiCCFN}/inventory/`, data).toPromise().then((resp) => {
-      if(resp) {
+      if (resp) {
         this.Document.StatusId = 2;
       }
     }).catch(err => {
@@ -140,7 +161,7 @@ export class InventoryRequestDetailComponent implements OnInit {
       statusId: 3
     }
     this.http.put(`${environment.apiCCFN}/inventory/`, data).toPromise().then((resp) => {
-      if(resp) {
+      if (resp) {
         this.Document.StatusId = 2;
       }
     }).catch(err => {
@@ -157,6 +178,54 @@ export class InventoryRequestDetailComponent implements OnInit {
     this.updateSubject.next(this.ProductsDisplay);
   }
 
+  updateStock() {
+
+    // this.spinner.show(undefined, { fullScreen: true });
+
+    const output = this.Document.Rows.map(row => row.ItemCode);
+
+    if (output.length == 0) {
+      this.toastr.info("No Hay Productos Para Actualizar", "Sin Productos");
+    }
+
+    this.http.post(`${environment.apiSAP}/products/UpdateStock/${this.Document.WhsCode}`, output).toPromise().then((items: { ItemCode: string, OnHand: number }[]) => {
+
+      this.Document.Rows.forEach(row => {
+        const item = items.find(item => item.ItemCode == row.ItemCode);
+        if (item != undefined) {
+          row.updatedQty = item.OnHand;
+        } else {
+          row.updatedQty = undefined;
+        }
+      });
+
+
+      const itemChanged = this.Document.Rows.filter(row => row.updatedQty != row.InvQuantity && row.updatedQty != undefined).map(row => {
+        return {
+          Qty: row.updatedQty,
+          id: row.ID
+        };
+      });
+
+
+      if (itemChanged.length == 0) {
+        this.toastr.info("No hay producto con diferencia de stock", "Info")
+        return Promise.resolve(1);
+      }
+
+      return this.http.put(`${environment.apiCCFN}/inventoryDetail/updateStock`, itemChanged).toPromise();
+    }).then(r => {
+      console.log(r);
+      window.location.reload();
+    }).catch(err => {
+      console.log(err)
+      this.toastr.error("Error Al Actualizar Stock", 'Error');
+    }).finally(() => {
+      this.spinner.hide();
+    });
+
+  }
+
   download(filename, text) {
     const element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -167,24 +236,42 @@ export class InventoryRequestDetailComponent implements OnInit {
     document.body.removeChild(element);
   }
 
-  generateTxt() {
-    // const lines = [];
-    // this.Document.Rows.forEach(Row => {
-    //   Row.Detail.forEach(Detail => {
-    //     if (Detail.Quantity) {
-    //       const line = [Detail.ItemCode.substring(1), Detail.Quantity];
+  generateExcelParaDummies() {
+    const workbook = utils.book_new();
+    const rows: any[] = this.Document.Rows.map(Row => {
+      return {
+        ItemCode: Row.ItemCode,
+        CantContada: Row.Quantity,
+      };
+    });
+    rows.unshift({
+      ItemCode: 'Numero de Articulo',
+      CantContada: 'Cant. Contada',
+    });
 
-    //       if (Row.IUoMEntry == 185 && Row.NeedBatch == 'Y' && Row.WeightType == 'V') {
-    //         line.push(Detail.Quantity);
-    //       } else {
-    //         line.push((Detail.Quantity / Row.NumInSale).toFixed(2));
-    //       }
-    //       line.push(Detail.EmployeeName.replace(/ /g, '').substr(0, 15));
-    //       lines.push(line.join('|'));
-    //     }
-    //   });
-    // });
-    // this.download('inven.txt', lines.join('\n'));
+    const objectMaxLength: number[] = [];
+    for (let i = 0; i < rows.length; i++) {
+      const value = <any[]>Object.values(rows[i]);
+      for (let j = 0; j < value.length; j++) {
+        if (typeof value[j] == 'number') {
+          objectMaxLength[j] = 10;
+        } else {
+          if (value[j]) {
+            objectMaxLength[j] =
+              objectMaxLength[j] >= value[j].length
+                ? objectMaxLength[j]
+                : value[j].length;
+          }
+        }
+      }
+    }
+
+    const wscols = objectMaxLength.map(length => ({ width: length }));
+    const worksheet = utils.json_to_sheet(rows, { skipHeader: true });
+    worksheet['!cols'] = wscols;
+
+    utils.book_append_sheet(workbook, worksheet, 'tab1');
+    writeFile(workbook, 'menudeo.xlsx');
   }
 
   generateExcel() {
@@ -228,7 +315,7 @@ export class InventoryRequestDetailComponent implements OnInit {
 
     const objectMaxLength: number[] = [];
     for (let i = 0; i < rows.length; i++) {
-      const value = <any[]> Object.values(rows[i]);
+      const value = <any[]>Object.values(rows[i]);
       for (let j = 0; j < value.length; j++) {
         if (typeof value[j] == 'number') {
           objectMaxLength[j] = 10;
@@ -244,7 +331,7 @@ export class InventoryRequestDetailComponent implements OnInit {
     }
 
     const wscols = objectMaxLength.map(length => ({ width: length }));
-    const worksheet = utils.json_to_sheet(rows, {skipHeader: true});
+    const worksheet = utils.json_to_sheet(rows, { skipHeader: true });
     worksheet['!cols'] = wscols;
 
     utils.book_append_sheet(workbook, worksheet, 'tab1');

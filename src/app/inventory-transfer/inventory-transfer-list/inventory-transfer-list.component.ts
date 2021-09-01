@@ -19,6 +19,7 @@ export class InventoryTransferListComponent implements OnInit, AfterViewInit, On
 
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('currentUser'));
+    const token = localStorage.getItem('token');
     let orderUrl;
 
     if (user && user.warehouseCode) {
@@ -35,6 +36,7 @@ export class InventoryTransferListComponent implements OnInit, AfterViewInit, On
       ajax: {
         url: orderUrl,
         type: 'POST',
+        headers: {'Authorization': `Bearer ${token}`},
         contentType: 'application/json',
         dataType: 'json',
         data(d) {

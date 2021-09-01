@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -42,11 +42,17 @@ export class InventoryRequestCreateComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    const token = localStorage.getItem('token');
+
+    let headers = new HttpHeaders();
+
+    headers = headers.set('Authorization', `Bearer ${token}`);
+
     this.spinner.show(undefined, { fullScreen: true });
     Promise.all([
       this.http.get(`${environment.apiCCFN}/warehouse`).toPromise(),
       this.http.get(`${environment.apiCCFN}/inventoryType`).toPromise(),
-      this.http.get(environment.apiSAP + '/products/properties').toPromise()
+      this.http.get(environment.apiSAP + '/products/properties',  { headers }).toPromise()
     ]).then(([warehouseList, optionsMode ,propertyList]: any[]) => {
 
       this.warehouseList = warehouseList;

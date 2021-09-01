@@ -1,1 +1,41 @@
-<p>dashboard works!</p>
+<div class="body">
+  <div class="row">
+    <div class="col-3">
+      <label>Inventario</label>
+      <select
+        class="form-control"
+        [(ngModel)]="inventorySelected"
+        (ngModelChange)="triggerCharts()"
+      >
+        <option [ngValue]="inventory" *ngFor="let inventory of inventoryList">
+          {{ inventory.ID }} - {{ inventory.WhsName }} - {{ inventory.Status }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header"><b>Top 10 Stock Escaneado</b></div>
+        <div class="card-body">
+          <div class="card-text">
+            <canvas #barChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="card-header"><b>Top 10 Usuarios</b></div>
+        <div class="card-body">
+          <div class="card-text">
+            <canvas #doughnut></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

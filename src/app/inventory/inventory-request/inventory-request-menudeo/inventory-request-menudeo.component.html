@@ -1,0 +1,73 @@
+<div class="header">
+    <button class="btn btn-primary btn-right">
+      Regresar
+    </button>
+    <h2>Reporte De Inventario De Menudeo</h2>
+</div>
+  
+<div class="body">
+    <div class="row">
+        <div class="col-3">
+            <label>Sucursal</label>
+            <select class="form-control" [(ngModel)]="sucursal">
+                <option [ngValue]="s" *ngFor="let s of listSucursal">
+                  {{ s.WhsCode  }} - {{s.WhsName }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label>Dia Inicio</label>
+            <select class="form-control" [(ngModel)]="diaI">
+                <option *ngFor="let d of dias">
+                  {{d.dia }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label>Mes Inicio</label>
+            <select class="form-control" [(ngModel)]="mesI">
+                <option [ngValue]="m" *ngFor="let m of meses">
+                  {{m.n }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-2">
+            <label>Año Inicio</label>
+            <select class="form-control" [(ngModel)]="yearI">
+                <option *ngFor="let y of years">
+                  {{y.year }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-off">
+            <label>Dia Final</label>
+            <select class="form-control" [(ngModel)]="diaF">
+                <option *ngFor="let d of dias">
+                  {{d.dia }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label>Mes Final</label>
+            <select class="form-control" [(ngModel)]="mesF">
+                <option [ngValue]="m" *ngFor="let m of meses">
+                  {{m.n }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label>Año Final</label>
+            <select class="form-control" [(ngModel)]="yearF">
+                <option *ngFor="let y of years">
+                  {{y.year }} 
+                </option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label>Generar Excel</label>
+            <button class="btn btn-success" (click)="generateExcel()">
+                Generar Excel
+              </button>
+        </div>
+    </div>
+</div>
